@@ -1,33 +1,34 @@
-from llama_index.core import VectorStoreIndex, SimpleDirectoryReader, Settings
-
+from llama_index.core import VectorStoreIndex, Settings
 from llama_index.llms.ollama import Ollama
-
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 
-# Configuração do modelo local
-Settings.llm = Ollama(model="qwen2.5:1.5b", request_timeout=120)
+from preparedata import carregar_documentos_csv
 
-# Configuração de embeddings
+Settings.llm = Ollama(
+    model="qwen2.5:1.5b",
+    request_timeout=120
+)
+
 Settings.embed_model = HuggingFaceEmbedding(
     model_name="sentence-transformers/all-MiniLM-L6-v2"
 )
 
-# Carrega documentos da pasta docs
-documents = SimpleDirectoryReader("docs").load_data()
+print("Carregando documentos dos CSVs...")
+documents = carregar_documentos_csv()
 
-# Cria índice vetorial
+print(f"Total de documentos carregados: {len(documents)}")
+
+print("Criando índice vetorial...")
 index = VectorStoreIndex.from_documents(documents)
 
-# Cria mecanismo de busca
 query_engine = index.as_query_engine(
     similarity_top_k=5
 )
 
-print("BPMN-BOT iniciado!")
+print("\nBPMN-BOT iniciado!")
 print("Digite 'sair' para encerrar.\n")
 
 while True:
-
     pergunta = input("Pergunta: ")
 
     if pergunta.lower() == "sair":
@@ -41,18 +42,12 @@ while True:
     print("\nFontes recuperadas:")
 
     for i, node in enumerate(resposta.source_nodes, start=1):
-
-        arquivo = node.metadata.get(
-            "file_name",
-            "arquivo desconhecido"
+        dataset = node.metadata.get(
+            "dataset",
+            "dataset desconhecido"
         )
 
-        pagina = node.metadata.get(
-            "page_label",
-            "página desconhecida"
-        )
-
-        print(f"\nFonte {i}: {arquivo} - página {pagina}")
+        print(f"\nFonte {i}: {dataset}")
         print(node.text[:500])
         print("---")
 
