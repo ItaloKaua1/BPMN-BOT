@@ -1,5 +1,11 @@
+from pathlib import Path
+
 import pandas as pd
 from llama_index.core import Document
+
+
+ROOT_DIR = Path(__file__).resolve().parents[1]
+DATASETS_DIR = ROOT_DIR / "datasets"
 
 
 def valor_seguro(row, coluna):
@@ -118,8 +124,7 @@ def criar_documentos_csv(caminho_csv, nome_dataset):
             text=texto,
             metadata={
                 "dataset": nome_dataset,
-                "source_file": caminho_csv
-            }
+                "source": str(caminho_csv),}
         )
 
         documentos.append(doc)
@@ -141,7 +146,11 @@ def carregar_documentos_csv():
     todos_documentos = []
 
     for dataset in datasets:
-        caminho = f"datasets/{dataset}.csv"
+        caminho = DATASETS_DIR / f"{dataset}.csv"
+
+        if not caminho.exists():
+            print(f"Aviso: dataset nao encontrado: {caminho}")
+            continue
 
         docs = criar_documentos_csv(caminho, dataset)
 
