@@ -16,6 +16,7 @@ from catalog_query import (
     contar_publicacoes_por_ano,
     listar_publicacoes_por_ano,
     listar_publicacoes_por_tipo,
+    listar_dominios_e_areas
 )
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
@@ -255,6 +256,22 @@ def tentar_responder_catalogo_estruturado(pergunta):
     if "sobre" in pergunta_lower and "public" in pergunta_lower:
         termo = pergunta_lower.split("sobre", 1)[1]
         termo = termo.replace(".", "").strip()
+        return buscar_publicacoes_por_termo(termo)
+    
+    if "domínios" in pergunta_lower or "dominios" in pergunta_lower:
+        return listar_dominios_e_areas()
+
+    if "áreas de aplicação" in pergunta_lower or "areas de aplicacao" in pergunta_lower:
+        return listar_dominios_e_areas()
+    
+    if "existe" in pergunta_lower and "extensão" in pergunta_lower and "para" in pergunta_lower:
+        termo = pergunta_lower.split("para", 1)[1]
+        termo = termo.replace("?", "").replace(".", "").strip()
+        return buscar_publicacoes_por_termo(termo)
+
+    if "existe" in pergunta_lower and "extensao" in pergunta_lower and "para" in pergunta_lower:
+        termo = pergunta_lower.split("para", 1)[1]
+        termo = termo.replace("?", "").replace(".", "").strip()
         return buscar_publicacoes_por_termo(termo)
 
     return None

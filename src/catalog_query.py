@@ -151,3 +151,39 @@ def buscar_publicacoes_por_termo(termo):
         linhas.append(f"- {titulo} ({ano}) | {autores} | {tipo}")
 
     return "\n".join(linhas)
+
+def listar_dominios_e_areas():
+    df = carregar_csv("SLR-DATA")
+
+    dominio_col = "{RQ1.1:} What are the specific domains targeted by the BPMN extensions?"
+    area_col = "{RQ1.2:} What are the Application Areas targeted by the BPMN extensions?"
+
+    linhas = []
+
+    if dominio_col in df.columns:
+        dominios = (
+            df[dominio_col]
+            .dropna()
+            .astype(str)
+            .value_counts()
+        )
+
+        linhas.append("Domínios específicos encontrados no catálogo:")
+
+        for dominio, total in dominios.items():
+            linhas.append(f"- {dominio}: {total}")
+
+    if area_col in df.columns:
+        areas = (
+            df[area_col]
+            .dropna()
+            .astype(str)
+            .value_counts()
+        )
+
+        linhas.append("\nÁreas de aplicação encontradas no catálogo:")
+
+        for area, total in areas.items():
+            linhas.append(f"- {area}: {total}")
+
+    return "\n".join(linhas)
