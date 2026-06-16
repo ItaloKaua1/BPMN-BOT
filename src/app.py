@@ -10,13 +10,20 @@ from llama_index.llms.ollama import Ollama
 
 from preparedata import carregar_documentos_csv
 
+from catalog_query import (
+    autores_mais_frequentes,
+    buscar_publicacoes_por_termo,
+    contar_publicacoes_por_ano,
+    listar_publicacoes_por_ano,
+    listar_publicacoes_por_tipo,
+)
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
 
 
 Settings.llm = Ollama(
-    model="qwen2.5:1.5b",
-    request_timeout=120,
+    model="qwen2.5:7b",
+    request_timeout=180,
 )
 
 Settings.embed_model = HuggingFaceEmbedding(
@@ -27,6 +34,12 @@ Settings.embed_model = HuggingFaceEmbedding(
 def carregar_documentos_diretorio(caminho, nome_base):
     if not caminho.exists():
         print(f"Aviso: diretorio nao encontrado: {caminho}")
+        return []
+
+    arquivos = [arquivo for arquivo in caminho.rglob("*") if arquivo.is_file()]
+
+    if not arquivos:
+        print(f"Aviso: nenhum arquivo encontrado em: {caminho}")
         return []
 
     documentos = SimpleDirectoryReader(
@@ -57,7 +70,7 @@ def carregar_processo():
         "processo",
     )
 
-    # O metamodelo apoia a criacao e validacao de extensoes BPMN.
+    # Carrega documentos do metamodelo, se existirem.
     documentos.extend(
         carregar_documentos_diretorio(ROOT_DIR / "docs" / "metamodel", "metamodelo")
     )
@@ -99,6 +112,14 @@ def contem_alguma(pergunta, palavras):
 
 
 def escolher_engine(pergunta):
+    pergunta_lower = pergunta.lower()
+
+    if "recomenda" in pergunta_lower or "comunidade bpmn" in pergunta_lower:
+        return process_engine, "processo"
+
+    if "especialista" in pergunta_lower or "expert" in pergunta_lower:
+        return process_engine, "processo"
+    
     palavras_processo = [
         "como criar",
         "como desenvolver",
@@ -117,6 +138,16 @@ def escolher_engine(pergunta):
         "modelagem",
         "validacao",
         "validação",
+        "consultar especialistas",
+        "especialistas",
+        "experts",
+        "recomendações",
+        "recomendacoes",
+        "comunidade bpmn",
+        "community",
+        "abstract syntax",
+        "concrete syntax",
+        "sintaxe abstrata",
     ]
 
     palavras_catalogo = [
@@ -190,6 +221,43 @@ Pergunta do usuario:
 print("\nBPMN-BOT iniciado!")
 print("Digite 'sair' para encerrar.\n")
 
+def tentar_responder_catalogo_estruturado(pergunta):
+    pergunta_lower = pergunta.lower()
+
+    if "autores" in pergunta_lower and (
+        "mais" in pergunta_lower or "frequentes" in pergunta_lower
+    ):
+        return autores_mais_frequentes()
+
+    if "por ano" in pergunta_lower or "quantas publicações" in pergunta_lower:
+        return contar_publicacoes_por_ano()
+
+    for ano in ["2019", "2020", "2021", "2022", "2023", "2024", "2025"]:
+        if ano in pergunta_lower and "public" in pergunta_lower:
+            return listar_publicacoes_por_ano(ano)
+
+    if "journal" in pergunta_lower:
+        return listar_publicacoes_por_tipo("journal")
+
+    if "conference" in pergunta_lower or "conferência" in pergunta_lower:
+        return listar_publicacoes_por_tipo("conference")
+
+    if "relacionadas a" in pergunta_lower:
+        termo = pergunta_lower.split("relacionadas a", 1)[1]
+        termo = termo.replace(".", "").strip()
+        return buscar_publicacoes_por_termo(termo)
+
+    if "relacionados a" in pergunta_lower:
+        termo = pergunta_lower.split("relacionados a", 1)[1]
+        termo = termo.replace(".", "").strip()
+        return buscar_publicacoes_por_termo(termo)
+
+    if "sobre" in pergunta_lower and "public" in pergunta_lower:
+        termo = pergunta_lower.split("sobre", 1)[1]
+        termo = termo.replace(".", "").strip()
+        return buscar_publicacoes_por_termo(termo)
+
+    return None
 
 while True:
     pergunta = input("Pergunta: ")
@@ -197,7 +265,17 @@ while True:
     if pergunta.lower() == "sair":
         break
 
+    resposta_estruturada = tentar_responder_catalogo_estruturado(pergunta)
+
+    if resposta_estruturada:
+        print("\nResposta:")
+        print(resposta_estruturada)
+        print("\nFonte: consulta estruturada com pandas nos CSVs do catálogo\n")
+        continue
+
     engine, tipo_base = escolher_engine(pergunta)
+    print(f"\nBase escolhida: {tipo_base}")
+
     resposta = engine.query(criar_prompt(pergunta, tipo_base))
 
     print("\nResposta:")
