@@ -1,3 +1,4 @@
+import re
 from pathlib import Path
 
 from llama_index.core import (
@@ -100,6 +101,13 @@ process_index = VectorStoreIndex.from_documents(process_documents)
 
 catalog_engine = catalog_index.as_query_engine(similarity_top_k=4)
 process_engine = process_index.as_query_engine(similarity_top_k=6)
+
+estado_conversa = {
+    "fluxo_ativo": None,
+    "etapa_atual": None,
+    "dominio": None,
+    "conceitos": [],
+}
 
 
 def contem_alguma(pergunta, palavras):
@@ -230,6 +238,95 @@ Pergunta do usuario:
 print("\nBPMN-BOT iniciado!")
 print("Digite 'sair' para encerrar.\n")
 
+def extrair_dominio(pergunta):
+    pergunta_lower = pergunta.lower().strip()
+    padroes = [
+        r"é na área de (.+)",
+        r"é para (.+)",
+        r"na área de (.+)",
+        r"área de (.+)",
+        r"domínio de (.+)",
+        r"dominio de (.+)",
+        r"para (.+)",
+    ]
+    for padrao in padroes:
+        match = re.search(padrao, pergunta_lower)
+        if match:
+            return match.group(1).strip().rstrip(".,?")
+    return pergunta.strip().rstrip(".,?")
+
+
+def tentar_responder_fluxo_guiado(pergunta):
+    global estado_conversa
+    pergunta_lower = pergunta.lower()
+
+    intencao_criar = (
+        ("como criar" in pergunta_lower and "extensão bpmn" in pergunta_lower)
+        or ("como criar" in pergunta_lower and "extensao bpmn" in pergunta_lower)
+        or ("quero criar" in pergunta_lower and "extensão bpmn" in pergunta_lower)
+        or ("quero criar" in pergunta_lower and "extensao bpmn" in pergunta_lower)
+        or "criar extensão bpmn" in pergunta_lower
+        or "criar extensao bpmn" in pergunta_lower
+    )
+
+    if intencao_criar:
+        estado_conversa["fluxo_ativo"] = "criacao_extensao"
+        estado_conversa["etapa_atual"] = "informar_dominio"
+        estado_conversa["dominio"] = None
+        estado_conversa["conceitos"] = []
+        return "Qual é o domínio ou área de aplicação da extensão que você deseja criar?"
+
+    if estado_conversa["fluxo_ativo"] == "criacao_extensao":
+
+        if estado_conversa["etapa_atual"] == "informar_dominio":
+            dominio = extrair_dominio(pergunta)
+            estado_conversa["dominio"] = dominio
+
+            resultado_catalogo = buscar_publicacoes_por_termo(dominio)
+            tem_resultado = resultado_catalogo and "nenhuma publicação encontrada" not in resultado_catalogo.lower()
+
+            if tem_resultado:
+                resposta = (
+                    f"Domínio registrado: {dominio}\n\n"
+                    f"Encontrei extensões relacionadas no catálogo:\n\n"
+                    f"{resultado_catalogo}\n\n"
+                    "O processo BPMN recomenda verificar se alguma extensão existente já atende "
+                    "à sua necessidade antes de criar uma nova. Avalie se alguma das extensões "
+                    "acima pode ser reutilizada ou adaptada.\n\n"
+                    "---\n\n"
+                    "Quais conceitos desse domínio o BPMN padrão não consegue representar adequadamente?"
+                )
+            else:
+                resposta = (
+                    f"Domínio registrado: {dominio}\n\n"
+                    "Não foram encontradas extensões relacionadas a esse domínio no catálogo. "
+                    "Isso sugere que sua extensão pode ser uma contribuição inédita para a comunidade.\n\n"
+                    "---\n\n"
+                    "Quais conceitos desse domínio o BPMN padrão não consegue representar adequadamente?"
+                )
+
+            estado_conversa["etapa_atual"] = "identificar_conceitos"
+            return resposta
+
+        if estado_conversa["etapa_atual"] == "identificar_conceitos":
+            conceitos = [c.strip() for c in re.split(r"[,;]", pergunta) if c.strip()]
+            estado_conversa["conceitos"] = conceitos
+            estado_conversa["etapa_atual"] = "descrever_conceitos"
+
+            lista = "\n".join(f"- {c}" for c in conceitos)
+            return (
+                f"Conceitos registrados para o domínio '{estado_conversa['dominio']}':\n\n"
+                f"{lista}\n\n"
+                "Agora vamos verificar se algum construto BPMN existente pode ser reutilizado "
+                "para representar esses conceitos, ou se novos elementos precisam ser criados.\n\n"
+                "Para cada conceito, você consegue informar:\n"
+                "1. O que ele representa no seu domínio?\n"
+                "2. Por que o BPMN padrão não consegue representá-lo?"
+            )
+
+    return None
+
+
 def tentar_responder_catalogo_estruturado(pergunta):
     pergunta_lower = pergunta.lower()
 
@@ -287,32 +384,6 @@ def tentar_responder_catalogo_estruturado(pergunta):
 def tentar_responder_processo_guiado(pergunta):
     pergunta_lower = pergunta.lower()
 
-    if "como criar" in pergunta_lower and "extensão bpmn" in pergunta_lower:
-        return """
-Para criar uma extensão BPMN, comece verificando se ela é realmente necessária.
-
-1. Analise a necessidade da extensão
-    Verifique o domínio, os conceitos que precisam ser representados e se o BPMN padrão já atende ao problema.
-
-2. Descreva os conceitos da extensão
-    Liste os conceitos novos, veja se algum construto BPMN pode ser reutilizado e defina a relação entre os conceitos da extensão e o BPMN.
-
-3. Desenvolva a extensão
-    Defina metamodelo, regras de validação, sintaxe concreta, análise de consistência e, se necessário, suporte ferramental.
-
-4. Valide e avalie a extensão
-    Aplique a extensão em um cenário, consulte especialistas, corrija problemas e registre evidências de avaliação.
-
-5. Publique a extensão
-    Registre a extensão no catálogo, busque endosso quando necessário e disponibilize a especificação.
-
-Primeiro passo agora:
-responda qual domínio ou área de aplicação você quer modelar e quais conceitos o BPMN padrão não consegue representar.
-
-Artefato inicial:
-Extension specification [Analysed].
-""".strip()
-
     if "como desenvolver" in pergunta_lower and "extensão bpmn" in pergunta_lower:
         return """
 Para desenvolver uma extensão BPMN, você deve partir de uma extensão já conceitualizada.
@@ -350,6 +421,14 @@ while True:
         print("\nResposta:")
         print(resposta_estruturada)
         print("\nFonte: consulta estruturada com pandas nos CSVs do catálogo\n")
+        continue
+
+    resposta_fluxo = tentar_responder_fluxo_guiado(pergunta)
+
+    if resposta_fluxo:
+        print("\nResposta:")
+        print(resposta_fluxo)
+        print("\nFonte: fluxo guiado de criação de extensão BPMN\n")
         continue
 
     resposta_processo_guiado = tentar_responder_processo_guiado(pergunta)
