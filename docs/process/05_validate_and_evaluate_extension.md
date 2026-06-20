@@ -27,7 +27,7 @@ Next subprocess:
 Related process:
 - `00_bpmn_extension_process_overview.md`
 
-Use this process when the BPMN extension must be applied with tool support. The goal is to make the extension available in a modelling tool, either by adding the new constructs to an existing tool or by implementing a new tool for the extension.
+Use this process to validate and evaluate the BPMN extension through practical usage, expert review and evaluation activities.
 
 ## Objective
 
@@ -38,6 +38,22 @@ The expected final outcome is:
 - **Extension specification [Validated/evaluated]**
 - **BPMN extension evaluated**
 
+## Validation and Evaluation Strategy
+
+This subprocess validates the BPMN extension through three complementary activities:
+
+1. Practical usage of the extension in realistic modelling scenarios.
+
+2. Review by BPMN extension experts and, when applicable,
+   domain experts.
+
+3. Formal evaluation through experiments, case studies
+   or surveys.
+
+The BPMN-BOT should guide the Extender through all
+validation activities and register every identified
+improvement.
+
 ## Participants
 
 - Extender
@@ -47,10 +63,10 @@ The expected final outcome is:
 
 ## Inputs
 
-- BPMN extension to be applied.
+- BPMN extension developed.
 - Extension specification [Developed].
-- Modelling tool for the extension, when a new tool will be produced.
-- Meta4Model-BPMN, when the extension constructs are added to an existing tool.
+- Modelling tool for the extension, when available.
+- Example models or case studies.
 
 ## Supporting Artifacts Used in this Subprocess
 
@@ -59,163 +75,219 @@ The following artifacts are created, updated or consulted:
 - Extension specification [Developed]
 - List of experts in BPMN extensions
 - Checklist for verification of problems
+- Usage Example
+- Expert Review Results
 - Evaluation results
 - Identified improvements
 - Extension specification [Validated/evaluated]
 
 ## Instructions
 
-### Start: Apply the BPMN Extension
+### 4.1 Use the BPMN Extension Proposed to Model a System
 
-Begin when there is a BPMN extension ready to be applied with tool support.
+Apply the BPMN extension to one or more realistic modelling scenarios.
 
-Decision: **Is there an intention to produce a new tool?**
+The BPMN-BOT should encourage the use of non-trivial and real-world examples.
 
-- **Yes**: implement the extension in a modelling tool and continue to step 3.5.2.
-- **No**: add the new constructs to an existing tool and continue to step 3.5.1.
+Document:
 
-### 3.5.1 Add the New Construct(s) to the Tool
+- modelling steps;
+- modelling decisions;
+- identified limitations;
+- usability observations;
+- improvement opportunities.
 
-Use this path when there is no intention to produce a new modelling tool.
+Decision:
 
-Add the extension constructs to the existing tool, using **Meta4Model-BPMN** or the selected tool infrastructure as input.
+Were corrections/improvements identified?
 
-For each construct, configure or implement:
+- Yes → continue to step 4.2.
+- No → continue to step 4.3.
 
-- the construct name;
-- visual representation;
-- relation with the BPMN element it extends or annotates;
-- attributes and properties;
-- validation rules, when supported by the tool;
-- palette or modelling interface entry;
-- serialization or export support, when applicable.
+### 4.2 Apply Corrections/Improvements From Usage
 
-After the constructs are added and usable in the tool, the output is **Extension available**.
+Apply corrections identified during practical usage.
 
-### 3.5.2 Implement the Extension in a Modelling Tool
+The BPMN-BOT should update the extension specification and record:
 
-Use this path when there is an intention to produce a new modelling tool or a dedicated tool implementation for the extension.
+- corrected concepts;
+- corrected syntax;
+- corrected metamodel elements;
+- identified issues.
 
-Implement the tool support according to the developed extension specification.
+After corrections are applied, continue to step 4.3.
 
-The implementation should include:
+### 4.3 Consult Experts
 
-- metamodel support;
-- concrete syntax rendering;
-- creation and editing of extension constructs;
-- property panels or configuration fields;
-- validation rules;
-- model persistence;
-- import and export, when applicable;
-- integration with BPMN modelling functionality.
+Submit the BPMN extension for expert review.
 
-Produce or update the **modelling tool for the extension**.
+Experts may include:
 
-After implementation, continue to testing.
+- BPMN extension experts;
+- BPMN practitioners;
+- domain specialists;
+- researchers from related application areas.
 
-### 3.5.3 Test the Modelling Tool
+Collect:
 
-Test the modelling tool to verify that the extension can be correctly applied.
+- comments;
+- suggestions;
+- criticisms;
+- improvement proposals.
 
-The tests should verify:
+Decision:
 
-- all extension constructs can be created;
-- concrete syntax is rendered correctly;
-- properties and attributes can be edited;
-- validation rules identify invalid models;
-- valid models are accepted;
-- models can be saved and loaded;
-- import and export work correctly, when applicable;
-- the tool remains compatible with BPMN modelling behaviour;
-- example models can be produced with the extension.
+Are there corrections/improvements suggested?
 
-Decision: **Has any correction been identified?**
+- Yes → continue to step 4.4.
+- No → continue to evaluation decision.
 
-- **Yes**: correct the modelling tool and continue to step 3.5.4.
-- **No**: make the tool available and continue to step 3.5.5.
+### 4.4 Apply Corrections/Improvements From Experts
 
-### 3.5.4 Correct the Modelling Tool for the Extension
+Apply expert recommendations.
 
-Correct all problems identified during testing.
+The BPMN-BOT should ensure that modifications do not introduce:
 
-Corrections may include:
+- inconsistencies;
+- incompleteness;
+- conflicts.
 
-- fixing visual representation problems;
-- correcting metamodel mappings;
-- adjusting validation rules;
-- fixing persistence or export problems;
-- improving construct creation and editing;
-- correcting integration with BPMN elements;
-- updating examples or templates;
-- resolving usability problems that prevent extension application.
+After corrections are applied, continue to the evaluation decision.
 
-After corrections are applied, return to step 3.5.3 and test the modelling tool again.
+### Evaluation Decision
 
-Repeat the test and correction cycle until no correction is identified.
+Evaluate the extension?
 
-### 3.5.5 Make the Tool Available
+- Yes → continue to step 4.5.
+- No → continue to step 4.7.
 
-When no correction remains, make the modelling tool available to users.
+### 4.5 Evaluate the BPMN Extension
 
-Provide, when applicable:
+Evaluation may be performed using:
 
-- tool package or installation instructions;
-- access link or distribution location;
-- user documentation;
-- example models;
-- supported BPMN extension constructs;
-- known limitations;
-- version information;
-- instructions for reporting issues.
+- Controlled Experiment;
+- Case Study;
+- Survey.
 
-The output of this step is **Extension applied**.
+The BPMN-BOT should help select the most suitable method according to:
+
+- available participants;
+- research objectives;
+- available time;
+- extension maturity.
+
+Record:
+
+- evaluation method;
+- participants;
+- results;
+- identified strengths;
+- identified weaknesses.
+
+Decision:
+
+Are there improvements of the BPMN extension defined?
+
+- Yes → continue to step 4.6.
+- No → continue to step 4.7.
+
+### 4.6 Apply Improvements From Evaluation
+
+Apply the improvements identified during evaluation.
+
+Update:
+
+- extension concepts;
+- metamodel;
+- syntax;
+- documentation;
+- examples.
+
+After improvements are applied, continue to step 4.7.
+
+### 4.7 Generate Extension Specification [Validated/Evaluated]
+
+Generate the final validated version of the BPMN extension specification.
+
+Include:
+
+- usage examples;
+- expert feedback;
+- evaluation results;
+- applied improvements;
+- final observations.
+
+Output:
+
+- Extension Specification [Validated/Evaluated]
+- BPMN Extension Evaluated
+
+
+
+## BPMN-BOT Validation States
+
+| State | Process Step | Bot Action | Artifact Updated |
+|---------|---------|---------|---------|
+| `4.1_use_extension` | Use BPMN extension to model a system | Collect modelling examples and observations | Usage Example |
+| `4.2_apply_usage_corrections` | Apply improvements from usage | Record corrections and update extension | Extension Specification [Developed] |
+| `4.3_consult_experts` | Consult experts | Collect expert feedback | Expert Review Results |
+| `4.4_apply_expert_corrections` | Apply expert suggestions | Update extension after review | Extension Specification [Developed] |
+| `4.5_evaluate_extension` | Evaluate BPMN extension | Guide evaluation planning and execution | Evaluation Results |
+| `4.6_apply_evaluation_improvements` | Apply improvements from evaluation | Update extension after evaluation | Extension Specification [Developed] |
+| `4.7_generate_validated_specification` | Generate final validated specification | Produce validated artefact | Extension Specification [Validated/Evaluated] |
 
 ## Guidance for BPMN-BOT
 
-When supporting this subprocess, BPMN-BOT should help answer questions such as:
+When supporting this subprocess, BPMN-BOT should act as a validation facilitator.
 
-1. How should the BPMN extension be validated?
-2. Which experts should be consulted?
-3. What corrections were identified during modelling?
-4. How should expert recommendations be incorporated?
-5. Which evaluation method should be used?
-6. What improvements were identified during evaluation?
-7. Is the extension ready to be considered validated?
-8. How should the validated specification be generated?
+The BPMN-BOT should:
+
+- guide the Extender through the execution of real modelling examples;
+- record modelling observations and identified limitations;
+- register corrections discovered during practical usage;
+- collect and organise expert feedback;
+- distinguish between expert suggestions and evaluation findings;
+- help select an evaluation strategy (experiment, case study or survey);
+- register evaluation results;
+- identify improvement opportunities;
+- update the Extension Specification [Validated/Evaluated];
+- indicate the current validation stage and the next expected activity.
+
+The BPMN-BOT should help answer questions such as:
+
+1. Which modelling scenarios should be used?
+2. Were limitations identified during usage?
+3. Which experts should be consulted?
+4. Which expert recommendations should be incorporated?
+5. Is an evaluation feasible within the project constraints?
+6. Which evaluation method is most appropriate?
+7. What improvements were identified?
+8. Is the extension ready to be considered validated?
+9. What information must be included in the validated specification?
 
 ## Decision Summary
 
 Use the following decision rules:
 
-- If the extension can be supported by adding constructs to an existing tool, use the existing tool path.
-- If a dedicated modelling environment is needed, implement the extension in a new modelling tool.
-- If testing identifies corrections, fix the tool and test again.
-- If testing identifies no correction, make the tool available.
-- The extension is considered applied only after the tool is available for use.
+- If practical usage identifies issues, apply corrections.
+- If experts suggest improvements, apply them.
+- If evaluation is feasible, perform an evaluation.
+- If evaluation identifies improvements, apply them.
+- Generate the validated specification only after all identified improvements have been addressed.
 
 ## Expected Outputs
 
-- New construct(s) added to the tool.
-- Modelling tool for the extension.
-- Tool test results.
-- Corrected modelling tool, when corrections are identified.
-- Extension available.
-- Extension applied.
+- Usage Example
+- Expert Review Results
+- Evaluation Results
+- Identified Improvements
+- Extension Specification [Validated/Evaluated]
+- BPMN Extension Evaluated
 
-## Transition Back to the Parent Subprocess
+## Transition to the Next Subprocess
 
-After this subprocess is completed, return to:
+After this subprocess is completed, continue to:
 
-`03_develop_bpmn_extension.md`
+`05_check_new_constructs.md`
 
-The result of this subprocess should be incorporated into the developed extension specification.
-
-If the extension was added to an existing tool, record the output as:
-
-- Extension available.
-
-If a new modelling tool was implemented, tested, corrected and made available, record the output as:
-
-- Extension applied.
-
-Then continue to step 3.6 Generate Extension Specification [Developed].
+Any new concepts identified during validation and evaluation should be recorded and considered in the next iteration of the BPMN extension process.

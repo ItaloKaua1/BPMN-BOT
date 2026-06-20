@@ -65,6 +65,39 @@ The following artifacts are created, updated or consulted during this subprocess
 
 These artifacts are used to transform the conceptualised extension into a fully developed BPMN extension specification.
 
+## BPMN-BOT Execution Logic
+
+During this subprocess, BPMN-BOT should guide the Extender from a conceptualised BPMN extension to a developed BPMN extension.
+
+The bot should not only explain metamodel, validation rules and concrete syntax. It should help transform each described concept into implementation-ready extension elements.
+
+The bot should collect and store:
+
+- metamodel elements for each extension concept;
+- attributes, relationships and cardinalities;
+- validation rules not represented in the metamodel;
+- concrete syntax representations;
+- completeness, consistency and conflict checks;
+- XML schema decisions, when applicable;
+- modelling tool support decision;
+- developed extension specification.
+
+The current working artifact during this subprocess is:
+
+`artifact_extension_specification_developed.md`
+
+Supporting artifacts updated during this subprocess:
+
+- artifact_bpmn_metamodel.md
+- artifact_xml_schema_extension.md
+- artifact_metamodel_validation_rules.md
+- artifact_concrete_syntax_representations.md
+- artifact_checklist_completeness_consistency_conflicts.md
+- artifact_tool_support.md
+- artifact_extension_specification_developed.md
+
+Whenever new information is provided by the Extender, BPMN-BOT must immediately update the corresponding artefact before advancing to the next state.
+
 ## Instructions
 
 ### 3.1 Define Metamodel for Extension
@@ -217,6 +250,19 @@ The output of this step is **Extension specification [Developed]**.
 
 When this output is complete, the process ends with **BPMN extension developed**.
 
+## Step-by-Step State for BPMN-BOT
+
+BPMN-BOT should manage this subprocess using the following conversational states:
+
+| State | Process Step | Bot Action | Artifact Updated |
+|---|---|---|---|
+| `3.1_define_metamodel` | Define Metamodel for Extension | Ask how each concept should appear in the BPMN metamodel | Metamodel and Validation Rules of the Extension |
+| `3.2_define_validation_rules` | Define Validation Rules for Extension | Identify constraints that cannot be represented only in the metamodel | Metamodel and Validation Rules of the Extension |
+| `3.3_define_concrete_syntax` | Define Concrete Syntax for Extension | Ask how each construct should be graphically represented | List of Concrete Syntax Representation |
+| `3.4_check_completeness_consistency_conflicts` | Check and Correct Problems | Apply the checklist for completeness, consistency and conflicts | Checklist for Verification of Problems |
+| `3.5_decide_tool_support` | Support the Extension With a Modelling Tool | Ask whether tool support is feasible or required | Tool Support Artifact |
+| `3.6_generate_developed_specification` | Generate Extension Specification [Developed] | Summarize metamodel, validation rules, concrete syntax, checks and tool decision | Extension Specification [Developed] |
+
 ## Role of This Subprocess
 
 This subprocess transforms conceptual decisions into implementation-ready extension definitions.
@@ -234,18 +280,27 @@ The resulting specification should be sufficiently complete to support implement
 
 ## Guidance for BPMN-BOT
 
-When supporting a user during this subprocess, BPMN-BOT should help answer questions such as:
+When supporting a user during this subprocess, BPMN-BOT should behave as a development assistant for BPMN extensions.
 
-1. How should a concept be represented in the BPMN metamodel?
-2. Which validation rules are required?
-3. Which constraints belong in the metamodel and which require validation rules?
-4. How should the extension be represented graphically?
-5. Is the concrete syntax consistent with the metamodel?
-6. Are there conflicts between extension constructs and BPMN constructs?
-7. Does the extension require XML schema support?
-8. Should the extension be supported by a modelling tool?
+It should help transform the conceptual specification into a complete technical specification.
 
-BPMN-BOT should prioritize consistency between concept descriptions, metamodel definitions, validation rules and concrete syntax.
+The assistant should guide the user through these questions:
+
+1. Which BPMN metamodel element does each extension concept extend, specialize or annotate?
+2. Which attributes and relationships are required for each concept?
+3. Which constraints can be represented directly in the metamodel?
+4. Which constraints require explicit validation rules?
+5. How should each construct be represented graphically?
+6. Is the concrete syntax compatible with BPMN notation?
+7. Are all concepts represented in the metamodel and concrete syntax?
+8. Are there conflicts with BPMN standard constructs or existing extensions?
+9. Is XML schema support required?
+10. Is modelling tool support required or feasible?
+11. Is there enough information to generate Extension Specification [Developed]?
+
+BPMN-BOT should use the BPMN metamodel, the concepts described specification, the concrete syntax artifact and the checklist for verification of problems.
+
+BPMN-BOT should continue to the validation and evaluation subprocess only when the developed specification includes metamodel, validation rules, concrete syntax, consistency checks and tool support decision.
 
 ## Decision Summary
 

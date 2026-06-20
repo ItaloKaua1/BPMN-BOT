@@ -1,5 +1,5 @@
 Process-ID: 4.3
-Parent-Process: 05
+Parent-Process: 4
 Type: subprocess
 
 # 4.3 Consult Experts
@@ -12,7 +12,7 @@ This document details subprocess 4.3 of
 This subprocess is executed during the validation and evaluation phase of the BPMN extension.
 
 Parent subprocess:
-- 05_validate_and_evaluate_extension.md
+- 04_validate_and_evaluate_extension.md
 
 Parent activity:
 - 4.3 Consult experts
@@ -26,7 +26,7 @@ Output:
 
 Next step:
 - Return to step 4.4 of
-  `05_validate_and_evaluate_extension.md`
+  `04_validate_and_evaluate_extension.md`
 
 Related process:
 - 00_bpmn_extension_process_overview.md
@@ -66,191 +66,127 @@ The following artifacts are created, updated or consulted:
 
 ## Instructions
 
-### 4.1 Use the BPMN Extension Proposed to Model a System
+### 4.3.1 Consult Experts in BPMN Extensions
 
-Apply the developed BPMN extension to model a representative system, process, or scenario.
+Identify BPMN extension experts.
 
-Use this activity to verify whether the extension can be used in practice.
+Use:
 
-During modelling, observe:
+- artifact_list_of_bpmn_extension_experts.md
 
-- whether all proposed constructs can be used;
-- whether the concrete syntax is understandable;
-- whether the extension concepts are clear;
-- whether the metamodel and validation rules are sufficient;
-- whether the extension supports the intended modelling need;
-- whether any construct is missing, redundant, ambiguous, or hard to use;
-- whether the extension creates conflicts with BPMN semantics.
+Send:
 
-Decision: **Were corrections/improvements identified?**
+- Extension Specification [Developed]
+- example models
+- identified issues
+- specific questions
 
-- **Yes**: apply corrections or improvements from usage and continue to step 4.2.
-- **No**: continue to expert consultation in step 4.3.
+Collect:
 
-### 4.2 Apply Corrections/Improvements From the Usage
+- recommendations
+- corrections
+- observations
 
-Apply the corrections and improvements identified while modelling a system with the BPMN extension.
+### 4.3.2 Consult Experts in Domain/Application Area
 
-Corrections may include:
+Only execute this path when the extension is related to a specific domain or application area.
 
-- adjusting concept definitions;
-- changing concrete syntax;
-- refining metamodel elements;
-- updating validation rules;
-- removing unnecessary constructs;
-- adding missing constraints;
-- improving examples;
-- correcting conflicts with BPMN constructs.
+Examples:
 
-After applying the corrections, update the **Extension specification [Developed]** and continue to expert consultation.
+- Security
+- Healthcare
+- IoT
+- Robotics
 
-### 4.3 Consult Experts
+Use:
 
-Consult BPMN extension experts to review the developed extension.
+- references identified during subprocess 1
 
-Send the experts:
+Collect:
 
-- Extension specification [Developed];
-- modelled system or example models;
-- list of corrections/improvements already applied from usage;
-- checklist for verification of problems;
-- specific questions about completeness, consistency, conflicts, and suitability.
+- missing concepts
+- domain inconsistencies
+- terminology corrections
+- practical observations
 
-Ask experts to verify:
+### 4.3.3 BPMN Experts Analyse the Extension
 
-- whether the extension is complete;
-- whether it is consistent with BPMN;
-- whether the concrete syntax is adequate;
-- whether validation rules are sufficient;
-- whether there are semantic conflicts;
-- whether the extension should be improved before evaluation.
+Experts analyse:
 
-Decision: **Are there corrections/improvements suggested?**
+- construct definitions
+- BPMN integration
+- syntax
+- metamodel
+- validation rules
 
-- **Yes**: apply the corrections/improvements from the experts and continue to step 4.4.
-- **No**: decide whether the extension should be evaluated and continue toward step 4.5 or step 4.7.
+Output:
 
-### 4.4 Apply the Corrections/Improvements From the Experts
+- BPMN expert feedback
 
-Apply the corrections and improvements suggested by BPMN extension experts.
+### 4.3.4 Domain Experts Analyse the Extension
 
-Use the **checklist for verification of problems** to ensure that each expert recommendation is evaluated and addressed.
+Experts analyse:
 
-For each suggestion, register:
+- domain correctness
+- concept completeness
+- practical applicability
 
-- expert source;
-- issue or improvement suggested;
-- affected extension construct;
-- decision taken;
-- change applied;
-- justification if the suggestion is not applied.
+Output:
 
-Update the developed specification before deciding whether to evaluate the extension.
+- domain expert feedback
 
-Decision: **Evaluate the extension?**
+### 4.3.5 Receive Feedback from BPMN Experts
 
-- **Yes**: continue to step 4.5.
-- **No**: continue to step 4.7 and generate the validated/evaluated specification with the current evidence.
+Review all received feedback.
 
-### 4.5 Evaluate the BPMN Extension
+Record:
 
-Evaluate the BPMN extension using the selected evaluation method.
+- expert
+- recommendation
+- impacted construct
+- action taken
 
-The evaluation may include:
+### 4.3.6 Receive Feedback from Domain Experts
 
-- expert review;
-- modelling experiment;
-- case study;
-- comparison with standard BPMN;
-- comparison with related BPMN extensions;
-- quality assessment;
-- usability assessment;
-- completeness, consistency, and conflict analysis.
+Review all received feedback.
 
-During evaluation, verify:
+Record:
 
-- whether the extension satisfies its purpose;
-- whether it improves modelling expressiveness;
-- whether it remains compatible with BPMN;
-- whether users can understand and apply it;
-- whether the extension specification is sufficiently complete;
-- whether the extension introduces modelling problems.
-
-Decision: **Are there improvements of the BPMN extensions defined?**
-
-- **Yes**: apply the improvements from the evaluation and continue to step 4.6.
-- **No**: continue to step 4.7.
-
-### 4.6 Apply the Improvements From the Evaluation
-
-Apply all improvements identified during evaluation.
-
-Improvements may include:
-
-- revising extension concepts;
-- changing concrete syntax;
-- improving validation rules;
-- updating examples;
-- refining the metamodel;
-- improving tool support;
-- clarifying documentation;
-- resolving problems found during evaluation.
-
-After applying the improvements, update the extension specification and continue to step 4.7.
-
-### 4.7 Generate Extension Specification [Validated/Evaluated]
-
-Generate the final specification for this process.
-
-The specification must include:
-
-- original developed extension specification;
-- models or scenarios used to validate the extension;
-- corrections/improvements from usage;
-- expert consultation results;
-- corrections/improvements from experts;
-- evaluation method;
-- evaluation results;
-- improvements from evaluation;
-- final checklist for verification of problems;
-- evidence that the extension is validated/evaluated.
-
-The output of this step is **Extension specification [Validated/evaluated]**.
-
-When this output is complete, the process ends with **BPMN extension evaluated**.
+- expert
+- recommendation
+- impacted concept
+- action taken
 
 ## Guidance for BPMN-BOT
 
-When supporting this subprocess, BPMN-BOT should help answer questions such as:
+The BPMN-BOT should act as a facilitator for expert review.
 
-1. Which BPMN extension experts should be consulted?
-2. Which domain experts should be consulted?
-3. What information should be sent to experts?
-4. Which practical aspects should be analysed?
-5. How should expert feedback be documented?
-6. How should conflicting expert opinions be handled?
-7. Which recommendations should be incorporated into the extension?
-8. Has the BPMN extension been sufficiently validated by experts?
+The BPMN-BOT should:
+
+- identify the appropriate expert type;
+- determine whether domain experts are required;
+- prepare information to be sent to experts;
+- organise received feedback;
+- distinguish BPMN feedback from domain feedback;
+- register expert recommendations;
+- identify impacted constructs;
+- prepare feedback summaries for subprocess 4.
 
 ## Decision Summary
 
 Use the following decision rules:
 
-- If usage identifies corrections or improvements, apply them before expert consultation.
-- If experts suggest corrections or improvements, apply or justify each decision before evaluation.
-- If the extension should be evaluated, perform the evaluation and incorporate the resulting improvements.
-- If evaluation identifies no improvements, proceed to the validated/evaluated specification.
-- The BPMN extension is considered evaluated only after the validated/evaluated specification is generated.
+- If the extension targets a specific application domain, consult domain experts.
+- BPMN extension experts should always be consulted when available.
+- All expert recommendations should be documented.
+- Expert feedback should be analysed before continuing to subprocess 4.4.
+- Lack of expert response should not block the process.
 
 ## Expected Outputs
 
-- System or scenario modelled with the BPMN extension.
-- Corrections/improvements from usage.
-- List of experts in BPMN extensions.
-- Expert consultation results.
-- Checklist for verification of problems.
-- Corrections/improvements from experts.
-- Evaluation results.
-- Improvements from evaluation.
-- Extension specification [Validated/evaluated].
-- Final decision that the BPMN extension is evaluated.
+- BPMN expert feedback.
+- Domain expert feedback.
+- Expert consultation records.
+- List of recommendations.
+- Identified corrections and improvements.
+- BPMN extension validated by experts.

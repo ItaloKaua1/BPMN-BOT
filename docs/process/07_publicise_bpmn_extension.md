@@ -52,6 +52,14 @@ Possible intermediate outcomes are:
 - List of experts in BPMN extensions.
 - Catalogue of BPMN extensions.
 
+## BPMN Extension Catalogue
+
+The BPMN Extension Catalogue should be considered the primary repository for registering BPMN extensions.
+
+The BPMN-BOT should assist the Extender in preparing all information required for catalogue registration before publication.
+
+Catalogue registration should occur before endorsement and publication activities.
+
 ## Supporting Artifacts Used in this Subprocess
 
 The following artifacts are created, updated or consulted during this subprocess:
@@ -106,6 +114,18 @@ The catalogue entry should include:
 - validation/evaluation status;
 - tool support status;
 - publication or access location.
+
+The catalogue entry should also document:
+
+- extension type (Implementation or Specification Diagram);
+- syntax level (abstract, concrete or both);
+- syntax compatibility;
+- conservative or non-conservative extension;
+- graphical representation strategy;
+- BPMN constructs modified;
+- metamodel completeness;
+- OMG guideline compliance;
+- modelling tool support.
 
 Decision: **Is there an expert in BPMN extensions as an Extender?**
 
@@ -194,6 +214,16 @@ Publication should make available:
 
 The output of this step is **BPMN extension publicised**.
 
+## BPMN-BOT Publication States
+
+| State | Process Step | Bot Action | Artifact Updated |
+|---------|---------|---------|---------|
+| `6.1_add_to_catalogue` | Add BPMN extension to catalogue | Collect catalogue metadata and register extension | Catalogue Entry |
+| `6.2_internal_endorsement` | Endorse BPMN extension | Verify endorsement by BPMN extension expert in the team | Endorsement Record |
+| `6.3_notify_experts` | Notify BPMN extension experts | Prepare and send endorsement request | Notification Record |
+| `6.4_external_endorsement` | External endorsement review | Record expert endorsement decision | Endorsement Record |
+| `6.5_publish_extension` | Publish BPMN extension | Prepare publication package and publication channels | Published BPMN Extension |
+
 ## Guidance for BPMN-BOT
 
 When supporting a user during this subprocess, BPMN-BOT should help answer questions such as:
@@ -206,6 +236,9 @@ When supporting a user during this subprocess, BPMN-BOT should help answer quest
 6. What makes a BPMN extension well-defined?
 7. Can the extension be published as endorsed?
 8. What publication artifacts should be made available?
+9. What information is required by the BPMN Extension Catalogue?
+10. Does the extension satisfy endorsement requirements?
+11. Which publication channel is most appropriate?
 
 BPMN-BOT should distinguish between adding an extension to the catalogue, endorsing the extension, and publishing the extension.
 

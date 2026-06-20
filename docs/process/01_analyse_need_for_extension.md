@@ -64,6 +64,37 @@ The following artifacts may be created, updated or consulted during this subproc
 
 These artifacts are reused by later subprocesses of the BPMN extension lifecycle.
 
+## BPMN-BOT Execution Logic
+
+During this subprocess, BPMN-BOT should not only explain the process. It should guide the user step by step and update the working state of the extension proposal.
+
+The bot should collect and store:
+
+- purpose of the extension;
+- domain/application area;
+- practical aspects;
+- references or related publications;
+- concepts to be introduced;
+- BPMN modelling limitations;
+- related BPMN extensions found in the catalogue;
+- decision about whether a new extension is necessary.
+
+The current working artifact during this subprocess is:
+
+`artifact_extension_specification_analysed.md`
+
+Supporting artifacts updated during this subprocess:
+
+- `artifact_list_of_references_and_contacted_researchers.md`
+- `artifact_list_of_concepts_to_be_introduced.md`
+- `artifact_modelling_and_observations.md`
+- `artifact_list_of_bpmn_extensions_related_to_proposal.md`
+- `artifact_extension_specification_analysed.md`
+- artifact_bpmn_conformity_checklist.md
+- artifact_extension_requirements_iso25010.md
+
+Whenever new information is provided by the Extender, BPMN-BOT must immediately update the corresponding artefact before advancing to the next state.
+
 ## Instructions
 
 ### 1.1 Study/Review the Domain or Application Area
@@ -202,7 +233,7 @@ Decision: **Was it possible to design with BPMN default syntax?**
 
 ### 1.11 Identify Whether There Are Extensions Related to the Current Proposal
 
-Search for existing BPMN extensions related to the current proposal.
+Search the BPMN Extension Catalogue and available BPMN extension datasets for existing extensions related to the current proposal.
 
 Use:
 
@@ -244,20 +275,54 @@ The analysed specification must include:
 
 The output of this step is **Extension specification [Analysed]** and the final decision **There is need for the extension**.
 
+## Step-by-Step State for BPMN-BOT
+
+BPMN-BOT should manage this subprocess using the following conversational states:
+
+| State | Process Step | Bot Action | Artifact Updated |
+|---|---|---|---|
+| `1.1_study_domain` | Study/Review the Domain or Application Area | Ask the user for domain, purpose and practical context | Extension Specification [Analysed] |
+| `1.2_identify_concepts` | Identify Concepts to Be Introduced | Ask which concepts BPMN cannot represent adequately | List of Concepts to Be Introduced |
+| `1.3_check_domain_issues` | Check for Issues About the Domain/Application Area | Identify domain doubts and determine whether domain experts should be consulted | Modelling and Observations |
+| `1.6_check_bpmn_suitability` | Identify Whether BPMN Meets Requirements | Evaluate BPMN suitability using the BPMN Conformity Checklist | BPMN Conformity Checklist |
+| `1.7_model_with_default_bpmn` | Model an Example With BPMN | Ask the user to describe modelling difficulties using standard BPMN | Modelling and Observations |
+| `1.8_consult_bpmn_experts` | Contact BPMN Extension Experts | Register BPMN modelling doubts and prepare expert consultation | Modelling and Observations |
+| `1.11_search_related_extensions` | Identify Related Extensions | Search the catalogue and datasets for related BPMN extensions | List of BPMN Extensions Related to Proposal |
+| `1.12_generate_analysed_specification` | Generate Extension Specification [Analysed] | Summarize the evidence and decide whether the extension is needed | Extension Specification [Analysed] |
+
+The bot should only continue to `02_describe_extension_concepts.md` after the analysed specification contains enough evidence that:
+
+- BPMN default syntax is insufficient; and
+- no existing BPMN extension fully satisfies the identified need.
+
 ## Guidance for BPMN-BOT
 
-When supporting a user during this subprocess, BPMN-BOT should help the user answer the following questions:
+When supporting a user during this subprocess, BPMN-BOT should behave as a process assistant.
+
+It should not only answer general questions. It should collect information, update the current artifact and decide the next step.
+
+The assistant should guide the user through these questions:
 
 1. What is the purpose of the proposed BPMN extension?
 2. Which domain or application area is being addressed?
-3. Which concepts cannot be represented adequately using standard BPMN?
-4. Is BPMN suitable for representing the problem?
-5. Can the concepts already be represented using BPMN default syntax?
-6. Are there existing BPMN extensions that already solve the problem?
-7. Which experts, researchers or references support the proposal?
-8. What evidence justifies the creation of a new BPMN extension?
+3. Which practical aspects justify the extension?
+4. Which concepts should be introduced?
+5. Can these concepts be represented with BPMN default syntax?
+6. What modelling difficulties appear when using BPMN without extension?
+7. Are there existing BPMN extensions related to the same domain or concepts?
+8. Is any existing extension suitable for the user need?
+9. Is there enough evidence to generate Extension Specification [Analysed]?
 
-BPMN-BOT should encourage the user to evaluate BPMN before proposing a new extension and should avoid recommending new extensions when BPMN or an existing extension is already sufficient.
+BPMN-BOT should use the catalogue and available datasets whenever a domain, application area or concept is identified.
+
+BPMN-BOT should consult the artifact documents when the user asks what must be filled, produced or updated.
+
+BPMN-BOT should stop the extension proposal if:
+
+- BPMN standard notation is sufficient; or
+- an existing BPMN extension already satisfies the need.
+
+BPMN-BOT should continue to `02_describe_extension_concepts.md` only when the need for a new extension is justified.
 
 ## Decision Summary
 

@@ -60,6 +60,55 @@ The following artifacts are created, updated or consulted during this subprocess
 
 These artifacts support the practical application of the BPMN extension in modelling environments.
 
+## BPMN-BOT Execution Logic
+
+This subprocess is optional and should only be executed when modelling tool support is required.
+
+BPMN-BOT should help the Extender decide whether:
+
+- an existing modelling tool is sufficient;
+- a modelling tool must be adapted;
+- a dedicated modelling tool should be created.
+
+The BPMN-BOT must collect and store:
+
+- selected modelling platform;
+- tool support strategy;
+- implemented extension constructs;
+- testing results;
+- identified corrections;
+- release information.
+
+Supporting artifacts updated during this subprocess:
+
+- artifact_modelling_tool_for_extension.md
+- artifact_tool_test_results.md
+- artifact_extension_specification_developed.md
+
+Whenever new information is provided, BPMN-BOT must update the corresponding artifact before advancing to the next activity.
+
+## Preferred Tool Reuse Strategy
+
+When tool support is required, BPMN-BOT should first evaluate whether the proposed extension can be supported by existing BPMN modelling tools.
+
+Examples include:
+
+1. Meta4Model-BPMN
+   https://meta4model.vercel.app/
+
+2. BPMN.io
+   https://bpmn.io/
+
+3. Camunda Modeler
+   https://camunda.com/
+
+4. Bizagi Modeler
+   https://www.bizagi.com/
+
+The goal is to identify reuse opportunities before proposing the development of a new modelling tool.
+
+If existing tools cannot adequately support the extension requirements, the proposal may include the implementation of a dedicated modelling tool.
+
 ## Instructions
 
 ### Start: Apply the BPMN Extension
@@ -182,6 +231,19 @@ Provide, when applicable:
 The output of this step is:
 
 - **Extension applied**.
+
+## Step-by-Step State for BPMN-BOT
+
+BPMN-BOT should manage this subprocess using the following conversational states:
+
+| State | Process Step | Bot Action | Artifact Updated |
+|---|---|---|---|
+| `3.5_decide_tool_strategy` | Decide Tool Support Strategy | Determine whether an existing tool or a new tool will be used | Modelling Tool for Extension |
+| `3.5.1_add_constructs_to_tool` | Add New Constructs to Existing Tool | Register how extension constructs will be incorporated | Modelling Tool for Extension |
+| `3.5.2_implement_new_tool` | Implement Extension in a Modelling Tool | Register implementation decisions | Modelling Tool for Extension |
+| `3.5.3_test_tool` | Test the Modelling Tool | Register test scenarios and results | Tool Test Results |
+| `3.5.4_correct_tool` | Correct the Modelling Tool | Register identified corrections | Tool Test Results |
+| `3.5.5_release_tool` | Make the Tool Available | Register publication and access information | Modelling Tool for Extension |
 
 ## Guidance for BPMN-BOT
 
