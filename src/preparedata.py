@@ -1,3 +1,4 @@
+import re
 from pathlib import Path
 
 import pandas as pd
@@ -6,6 +7,7 @@ from llama_index.core import Document
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
 DATASETS_DIR = ROOT_DIR / "datasets"
+DOCS_DIR = ROOT_DIR / "docs" / "process"
 
 
 def valor_seguro(row, coluna):
@@ -130,6 +132,115 @@ def criar_documentos_csv(caminho_csv, nome_dataset):
         documentos.append(doc)
 
     return documentos
+
+
+def quebrar_markdown_em_secoes(conteudo):
+    secoes = []
+    secao_atual_titulo = None
+    secao_atual_linhas = []
+
+    for linha in conteudo.splitlines():
+        match = re.match(r'^(#{1,3})\s+(.+)', linha)
+        if match:
+            if secao_atual_titulo is not None:
+                secoes.append((secao_atual_titulo, "\n".join(secao_atual_linhas).strip()))
+            secao_atual_titulo = match.group(2).strip()
+            secao_atual_linhas = []
+        elif secao_atual_titulo is not None:
+            secao_atual_linhas.append(linha)
+
+    if secao_atual_titulo is not None:
+        secoes.append((secao_atual_titulo, "\n".join(secao_atual_linhas).strip()))
+
+    return secoes
+
+
+def _extrair_keywords(titulo_secao, conteudo_secao):
+    palavras = re.sub(r'[^\w\s]', ' ', titulo_secao.lower()).split()
+    keywords = [p for p in palavras if len(p) > 3]
+
+    bold = re.findall(r'\*\*([^*]+)\*\*', conteudo_secao)
+    keywords.extend(b.lower() for b in bold)
+
+    seen = set()
+    result = []
+    for k in keywords:
+        if k not in seen:
+            seen.add(k)
+            result.append(k)
+    return result
+
+
+def criar_documento_semantico_markdown(nome_arquivo, titulo_secao, process_name, conteudo_secao, document_type, source):
+    keywords = _extrair_keywords(titulo_secao, conteudo_secao)
+
+    texto = f"""FILE: {nome_arquivo}
+
+SECTION: {titulo_secao}
+
+PROCESS: {process_name}
+
+CONTENT:
+{conteudo_secao}
+
+KEYWORDS:
+{chr(10).join(keywords)}""".strip()
+
+    return Document(
+        text=texto,
+        metadata={
+            "file_name": nome_arquivo,
+            "section_title": titulo_secao,
+            "document_type": document_type,
+            "source": source,
+        },
+    )
+
+
+def carregar_documentos_markdown():
+    diretorios = [
+        (DOCS_DIR, "process"),
+        (DOCS_DIR / "artifacts", "artifact"),
+    ]
+
+    todos_documentos = []
+
+    for diretorio, document_type in diretorios:
+        if not diretorio.exists():
+            print(f"Aviso: diretório não encontrado: {diretorio}")
+            continue
+
+        for caminho in sorted(diretorio.glob("*.md")):
+            conteudo = caminho.read_text(encoding="utf-8")
+            nome_arquivo = caminho.name
+
+            secoes = quebrar_markdown_em_secoes(conteudo)
+
+            if not secoes:
+                continue
+
+            process_name = secoes[0][0]
+
+            docs = []
+            for titulo_secao, conteudo_secao in secoes:
+                if not conteudo_secao.strip():
+                    continue
+
+                doc = criar_documento_semantico_markdown(
+                    nome_arquivo=nome_arquivo,
+                    titulo_secao=titulo_secao,
+                    process_name=process_name,
+                    conteudo_secao=conteudo_secao,
+                    document_type=document_type,
+                    source=str(caminho),
+                )
+                docs.append(doc)
+
+            todos_documentos.extend(docs)
+            print(f"{nome_arquivo}: {len(docs)} seções carregadas")
+
+    print(f"\nTOTAL DE DOCUMENTOS MARKDOWN: {len(todos_documentos)}")
+    return todos_documentos
 
 
 def carregar_documentos_csv():
