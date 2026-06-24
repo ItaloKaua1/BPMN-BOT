@@ -1,0 +1,129 @@
+A pergunta refere-se ao subprocesso 4 - Support the Extension With a Modelling Tool.
+
+REGRA CRÍTICA SOBRE RESULTADOS:
+
+Nunca generalize Extension Available e Extension Applied.
+
+Use sempre este mapeamento:
+
+- Se a extensão for incorporada, adicionada ou configurada em uma ferramenta de modelagem existente, o resultado é Extension Available.
+- Se uma ferramenta dedicada for implementada, testada, corrigida e disponibilizada aos usuários, o resultado é Extension Applied.
+
+Nunca diga que os dois caminhos geram Extension Available.
+Nunca diga que os dois caminhos geram Extension Applied.
+Nunca diga que adaptar uma ferramenta existente gera Extension Applied.
+Nunca diga que criar uma ferramenta dedicada gera Extension Available.
+
+REGRAS INTERNAS DO SUBPROCESSO:
+
+- Responda somente sobre suporte ferramental.
+- Não inclua etapas de validação, avaliação, publicação, endosso ou catálogo.
+- Não inclua análise de domínio nem descrição de conceitos, exceto se forem necessários como entrada já existente.
+- Se a pergunta tratar de uma etapa, termo, artefato ou decisão específica, responda apenas sobre esse item.
+- Não descreva todo o subprocesso quando a pergunta for específica.
+- Só apresente o fluxo completo quando a pergunta pedir "processo completo", "todas as etapas", "fluxo completo" ou "como funciona o subprocesso".
+- Quando a pergunta solicitar o procedimento completo, use a estrutura numerada abaixo.
+- Quando a pergunta comparar Extension Available e Extension Applied, deixe claro que são resultados de caminhos diferentes dentro do mesmo subprocesso.
+- Não diga que Extension Applied ocorre depois de Extension Available.
+- Não diga que a extensão "já estava previamente incorporada" ao explicar Extension Applied.
+- Extension Available está associado à adaptação de uma ferramenta existente.
+- Extension Applied está associado à implementação, teste, correção e disponibilização de uma ferramenta dedicada.
+
+DEFINIÇÕES QUE DEVEM SER USADAS QUANDO RELEVANTE:
+
+Extension Available: resultado obtido quando uma extensão BPMN é incorporada a uma ferramenta de modelagem existente, como Meta4Model-BPMN, BPMN.io, Camunda Modeler ou Bizagi Modeler. A extensão fica disponível para uso sem necessidade de criar uma ferramenta nova.
+
+Extension Applied: resultado obtido quando uma ferramenta dedicada é implementada, testada, corrigida e disponibilizada aos usuários para suportar a extensão.
+
+CONTEÚDO ESPERADO DA RESPOSTA:
+
+1. Decidir a Estratégia de Ferramenta
+O Extender deve primeiro avaliar se ferramentas existentes, como Meta4Model-BPMN, BPMN.io, Camunda Modeler ou Bizagi Modeler, podem ser adaptadas para suportar a extensão antes de considerar uma ferramenta dedicada.
+
+2. Adicionar Construtos a uma Ferramenta Existente
+Se a estratégia for adaptar uma ferramenta existente, os construtos devem ser adicionados ou configurados nessa ferramenta. O resultado esperado é Extension Available.
+
+3. Implementar uma Nova Ferramenta, se Necessário
+Se uma ferramenta dedicada for necessária, ela deve suportar metamodelo, sintaxe concreta, criação/edição de construtos, validação, persistência, importação/exportação e integração com BPMN.
+
+4. Testar a Ferramenta
+A ferramenta deve ser testada verificando criação de construtos, renderização da sintaxe concreta, edição de propriedades, regras de validação, salvamento/carregamento e compatibilidade BPMN.
+
+5. Corrigir Problemas
+Problemas identificados devem ser corrigidos e a ferramenta deve ser testada novamente.
+
+6. Disponibilizar a Ferramenta
+Quando não houver correções pendentes, a ferramenta deve ser disponibilizada aos usuários. O resultado é Extension Applied quando uma ferramenta dedicada foi criada.
+
+Artefatos/resultados esperados:
+- Modelling tool for the extension
+- Tool test results
+- Corrected modelling tool
+- Extension Available (ferramenta existente adaptada)
+- Extension Applied (ferramenta dedicada implementada e disponibilizada)
+
+REGRA OBRIGATÓRIA — DECISÃO ENTRE ADAPTAR OU CRIAR FERRAMENTA:
+
+Quando a pergunta envolver decidir entre adaptar ferramenta existente ou criar ferramenta dedicada:
+
+- apresente somente dois caminhos principais:
+  1. adaptar ferramenta existente;
+  2. criar ferramenta dedicada.
+- deixe claro que o caminho de adaptação de ferramenta existente gera Extension Available.
+- deixe claro que o caminho de ferramenta dedicada gera Extension Applied.
+- nunca diga que ambos os caminhos resultam em Extension Applied.
+- nunca diga que adaptar ferramenta existente gera Extension Applied.
+- não diga que ferramentas existentes "facilmente" integram novos elementos; diga apenas que elas devem ser avaliadas.
+- evite repetir o caminho de ferramenta dedicada em dois blocos diferentes.
+- não repita os requisitos técnicos da ferramenta dedicada em mais de um lugar.
+
+Resposta esperada para esse tipo de pergunta:
+
+"Como os conceitos, o metamodelo e a sintaxe concreta já foram definidos, o próximo passo é decidir a estratégia de suporte ferramental.
+
+Primeiro, o Extender deve avaliar se ferramentas existentes, como Meta4Model-BPMN, BPMN.io, Camunda Modeler ou Bizagi Modeler, podem ser adaptadas para suportar os novos construtos da extensão.
+
+Se uma ferramenta existente puder ser adaptada, os construtos devem ser adicionados ou configurados nessa ferramenta, considerando o metamodelo e a sintaxe concreta definidos. Nesse caminho, o resultado esperado é Extension Available, pois a extensão fica disponível para uso em uma ferramenta de modelagem existente.
+
+Se nenhuma ferramenta existente for adequada, o Extender deve desenvolver uma ferramenta dedicada. Essa ferramenta deve apoiar os elementos do metamodelo, a sintaxe concreta, a criação e edição dos novos construtos, regras de validação, persistência, importação/exportação e integração com BPMN.
+
+Depois disso, a ferramenta dedicada deve ser testada, corrigida e disponibilizada aos usuários. Nesse caminho, o resultado esperado é Extension Applied."
+
+REGRA PARA A PERGUNTA-MODELO SOBRE CRIAÇÃO DE FERRAMENTA:
+
+Quando a pergunta for semelhante a:
+
+- "Como criar uma ferramenta de modelagem para apoiar extensão?"
+- "Como criar uma ferramenta de modelagem para apoiar uma extensão BPMN?"
+- "Como desenvolver uma ferramenta de modelagem para a extensão?"
+- "Como implementar suporte ferramental para uma extensão BPMN?"
+- "Como apoiar a extensão com uma ferramenta de modelagem?"
+
+A resposta deve explicar o fluxo completo do subprocesso e cobrir obrigatoriamente os dois caminhos:
+
+1. Caminho sem criação de nova ferramenta:
+   Se não houver intenção de produzir uma nova ferramenta, o Extender deve adicionar os novos construtos da extensão a uma ferramenta de modelagem existente.
+   O resultado desse caminho é Extension Available.
+
+2. Caminho com criação de nova ferramenta:
+   Se houver intenção de produzir uma nova ferramenta, o Extender deve implementar a extensão em uma ferramenta de modelagem.
+   Depois, a ferramenta deve ser testada.
+   Se alguma correção for identificada, a ferramenta deve ser corrigida e testada novamente.
+   Quando não houver correções pendentes, a ferramenta deve ser disponibilizada aos usuários.
+   O resultado desse caminho é Extension Applied.
+
+Resposta esperada para essa pergunta-modelo:
+
+"Para criar uma ferramenta de modelagem para apoiar a extensão, primeiro é necessário decidir se existe intenção de produzir uma nova ferramenta.
+
+Se não houver intenção de criar uma nova ferramenta, o caminho recomendado é adaptar uma ferramenta existente. Nesse caso, o Extender deve adicionar os novos construtos da extensão à ferramenta de modelagem existente. O resultado desse caminho é Extension Available, pois a extensão passa a estar disponível em uma ferramenta já existente.
+
+Se houver intenção de produzir uma nova ferramenta, o Extender deve implementar a extensão em uma ferramenta de modelagem. Essa implementação deve considerar os construtos da extensão, o metamodelo, a sintaxe concreta e as regras necessárias para que os usuários consigam criar e editar modelos com a extensão.
+
+Depois da implementação, a ferramenta deve ser testada. Se alguma correção for identificada, o Extender deve corrigir a ferramenta e testá-la novamente. Esse ciclo continua até que não existam correções pendentes.
+
+Quando a ferramenta estiver implementada, testada e corrigida, ela deve ser disponibilizada aos usuários. O resultado desse caminho é Extension Applied."
+
+Nunca responda essa pergunta explicando apenas Extension Available.
+Nunca responda essa pergunta explicando apenas adaptação de ferramenta existente.
+Nunca omita as atividades de implementar, testar, corrigir e disponibilizar quando a pergunta for sobre criar ou desenvolver uma ferramenta de modelagem.

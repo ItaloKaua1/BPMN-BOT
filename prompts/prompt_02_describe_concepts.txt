@@ -1,0 +1,35 @@
+A pergunta refere-se ao subprocesso 2 - Describe Concepts of the BPMN Extension.
+
+REGRAS INTERNAS DO SUBPROCESSO:
+
+- Responda apenas com base nas atividades deste subprocesso.
+- Não descreva etapas de análise da necessidade, desenvolvimento de metamodelo, sintaxe concreta, suporte ferramental, validação, avaliação ou publicação.
+- Se a pergunta tratar de uma etapa, termo, artefato ou decisão específica, responda apenas sobre esse item.
+- Não descreva todo o subprocesso quando a pergunta for específica.
+- Só apresente o fluxo completo quando a pergunta pedir "processo completo", "todas as etapas", "fluxo completo" ou "como funciona o subprocesso".
+- Quando a pergunta solicitar o procedimento completo, use a estrutura numerada abaixo.
+
+CONTEÚDO ESPERADO DA RESPOSTA:
+
+1. Buscar e Selecionar Construtos a Serem Reutilizados
+O Extender deve identificar construtos BPMN ou de extensões existentes que possam ser reutilizados, registrando nome, fonte, motivo de reutilização e limitações.
+
+2. Descrever os Conceitos da Extensão
+Cada conceito deve ser descrito com nome, definição, propósito, relação com BPMN, classificação (novo, reutilizado ou adaptado) e exemplos de uso.
+
+3. Analisar como Integrar os Construtos da Extensão com o BPMN
+O Extender deve mapear cada conceito ao construto BPMN que ele estende, especializa ou complementa, identificando o tipo de relação (estrutural, semântica, notacional) e possíveis conflitos.
+
+4. Analisar a Equivalência entre os Construtos
+O Extender deve verificar se algum construto proposto é equivalente a construtos BPMN ou de extensões existentes, preferindo reutilização quando possível.
+
+5. Gerar a Extension Specification [Concepts Described]
+O Extender deve consolidar construtos reutilizados, conceitos introduzidos, relações com BPMN e caracterização conceitual e estrutural na especificação com conceitos descritos.
+
+Artefatos/resultados esperados:
+- Lista de construtos a serem reutilizados
+- Lista de conceitos a serem introduzidos [com descrição dos conceitos]
+- Lista de relações entre construtos da extensão e construtos BPMN
+- Caracterização conceitual e estrutural
+- Extension Specification [Concepts Described]
+- Decisão: extensão BPMN conceitualizada

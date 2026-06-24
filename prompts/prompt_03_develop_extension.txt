@@ -1,0 +1,39 @@
+A pergunta refere-se ao subprocesso 3 - Develop BPMN Extension.
+
+REGRAS INTERNAS DO SUBPROCESSO:
+
+- Responda apenas com base nas atividades deste subprocesso.
+- Não descreva etapas de análise da necessidade, descrição de conceitos, implementação de ferramenta de modelagem, validação, avaliação ou publicação.
+- Se a pergunta tratar de uma etapa, termo, artefato ou decisão específica, responda apenas sobre esse item.
+- Não descreva todo o subprocesso quando a pergunta for específica.
+- Só apresente o fluxo completo quando a pergunta pedir "processo completo", "todas as etapas", "fluxo completo" ou "como funciona o subprocesso".
+- Quando a pergunta solicitar o procedimento completo, use a estrutura numerada abaixo.
+
+CONTEÚDO ESPERADO DA RESPOSTA:
+
+1. Definir o Metamodelo da Extensão
+O Extender deve mapear cada conceito descrito para um elemento do metamodelo BPMN, especificando atributos, relacionamentos, cardinalidades, restrições e, quando aplicável, o esquema XML.
+
+2. Definir Regras de Validação
+Restrições que não podem ser representadas diretamente no metamodelo devem ser expressas como regras de validação explícitas, com identificador, condição, severidade e justificativa.
+
+3. Definir a Sintaxe Concreta
+Cada construto da extensão deve ter uma representação visual definida (marcador, ícone, forma, cor, rótulo ou relacionamento), compatível com a notação BPMN.
+
+4. Verificar Completude, Consistência e Conflitos
+O Extender deve aplicar o checklist de verificação para garantir que todos os conceitos estão representados no metamodelo, que a sintaxe concreta está alinhada e que não há conflitos com o BPMN padrão.
+
+5. Decidir sobre Suporte Ferramental
+O Extender deve decidir se a extensão será suportada por uma ferramenta de modelagem e registrar a decisão, mesmo que seja negativa.
+
+6. Gerar a Extension Specification [Developed]
+O Extender deve consolidar metamodelo, regras de validação, sintaxe concreta, resultado do checklist e decisão sobre ferramenta na especificação desenvolvida.
+
+Artefatos/resultados esperados:
+- Metamodelo da extensão
+- Regras de validação da extensão
+- Lista de representações de sintaxe concreta
+- Checklist de verificação de problemas
+- Decisão sobre suporte ferramental
+- Extension Specification [Developed]
+- Decisão: extensão BPMN desenvolvida

@@ -1,0 +1,47 @@
+A pergunta refere-se ao subprocesso 5 - Validate and Evaluate the BPMN Extension.
+
+REGRAS INTERNAS DO SUBPROCESSO:
+
+- Responda apenas com base nas atividades deste subprocesso.
+- Não descreva etapas de análise da necessidade, descrição de conceitos, desenvolvimento, suporte ferramental, registro no catálogo, endosso ou publicação.
+- Se a pergunta tratar de uma etapa, termo, artefato ou decisão específica, responda apenas sobre esse item.
+- Não descreva todo o subprocesso quando a pergunta for específica.
+- Só apresente o fluxo completo quando a pergunta pedir "processo completo", "todas as etapas", "fluxo completo" ou "como funciona o subprocesso".
+- Quando a pergunta solicitar o procedimento completo, use a estrutura numerada abaixo.
+- Quando a pergunta comparar validação e avaliação, não diga que validação ocorre antes da implantação real do sistema.
+- Não diga que avaliação é uma implementação mais robusta da validação.
+- Não diga que avaliação ocorre apenas depois da validação como se fossem fases externas ao processo.
+- Validação e avaliação são atividades complementares dentro do subprocesso 5.
+- Validação envolve uso prático da extensão em cenários realistas e revisão por especialistas.
+- Avaliação envolve métodos formais como experimento controlado, estudo de caso ou survey.
+- Validação ajuda a identificar limitações, correções e melhorias.
+- Avaliação registra método, participantes, resultados e melhorias identificadas.
+- A resposta deve ser fiel ao processo, sem usar definições genéricas de engenharia de software que não estejam nas fontes.
+
+CONTEÚDO ESPERADO DA RESPOSTA:
+
+1. Usar a Extensão BPMN para Modelar um Sistema
+O Extender deve aplicar a extensão em cenários de modelagem realistas, documentando decisões de modelagem, limitações identificadas e oportunidades de melhoria.
+
+2. Aplicar Correções do Uso Prático
+Correções identificadas durante o uso devem ser aplicadas na especificação antes de prosseguir para a revisão por especialistas.
+
+3. Consultar Especialistas
+A extensão deve ser submetida à revisão de especialistas em extensões BPMN e, quando relevante, especialistas no domínio, coletando recomendações, correções e sugestões.
+
+4. Aplicar Correções dos Especialistas
+O Extender deve incorporar o feedback recebido, verificando que as modificações não introduzem inconsistências, incompletude ou conflitos.
+
+5. Avaliar a Extensão BPMN (opcional)
+A extensão pode ser avaliada formalmente por meio de experimento controlado, estudo de caso ou survey, registrando método, participantes, resultados e melhorias identificadas.
+
+6. Gerar a Extension Specification [Validated/Evaluated]
+O Extender deve consolidar exemplos de uso, feedback de especialistas, resultados da avaliação e melhorias aplicadas na especificação validada/avaliada.
+
+Artefatos/resultados esperados:
+- Exemplos de uso
+- Resultados da revisão por especialistas
+- Resultados da avaliação
+- Melhorias identificadas e aplicadas
+- Extension Specification [Validated/Evaluated]
+- Decisão: extensão BPMN avaliada

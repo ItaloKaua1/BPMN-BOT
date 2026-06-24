@@ -1,0 +1,35 @@
+A pergunta refere-se ao subprocesso 4.3 - Consult Experts.
+
+REGRAS INTERNAS DO SUBPROCESSO:
+
+- Responda apenas com base nas atividades deste subprocesso.
+- Não descreva etapas de desenvolvimento do metamodelo, sintaxe concreta ou regras de validação, uso prático para modelagem, avaliação formal, publicação, catálogo ou endosso.
+- Se a pergunta tratar de uma etapa, tipo de especialista, artefato ou decisão específica, responda apenas sobre esse item.
+- Não descreva todo o subprocesso quando a pergunta for específica.
+- Só apresente o fluxo completo quando a pergunta pedir "processo completo", "todas as etapas", "fluxo completo" ou "como funciona o subprocesso".
+- Quando a pergunta solicitar o procedimento completo, use a estrutura numerada abaixo.
+
+CONTEÚDO ESPERADO DA RESPOSTA:
+
+1. Consultar Especialistas em Extensões BPMN
+O Extender deve identificar especialistas em extensões BPMN e enviar a especificação desenvolvida, modelos de exemplo, problemas identificados e questões específicas.
+
+2. Consultar Especialistas no Domínio/Área de Aplicação
+Este passo é executado apenas quando a extensão está relacionada a um domínio específico (como segurança, saúde, IoT, robótica), coletando conceitos ausentes, inconsistências terminológicas e observações práticas.
+
+3. Especialistas em BPMN Analisam a Extensão
+Os especialistas devem analisar definições de construtos, integração com BPMN, sintaxe concreta, metamodelo e regras de validação, produzindo feedback de especialistas BPMN.
+
+4. Especialistas no Domínio Analisam a Extensão
+Os especialistas devem analisar correção de domínio, completude conceitual e aplicabilidade prática, produzindo feedback de especialistas no domínio.
+
+5. Receber e Registrar o Feedback
+O Extender deve registrar cada recomendação com especialista, recomendação, construto impactado e ação tomada, tanto para feedback BPMN quanto para feedback de domínio.
+
+Artefatos/resultados esperados:
+- Feedback de especialistas em BPMN
+- Feedback de especialistas no domínio
+- Registros de consulta a especialistas
+- Lista de recomendações
+- Correções e melhorias identificadas
+- Extensão BPMN validada por especialistas

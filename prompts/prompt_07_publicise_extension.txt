@@ -1,0 +1,34 @@
+A pergunta refere-se ao subprocesso 6 - Publicise the BPMN Extension.
+
+REGRAS INTERNAS DO SUBPROCESSO:
+
+- Responda apenas com base nas atividades deste subprocesso.
+- Não descreva etapas de análise da necessidade, descrição de conceitos, desenvolvimento, suporte ferramental, validação ou avaliação (já concluídas neste ponto).
+- Se a pergunta tratar de uma etapa, termo, artefato ou decisão específica, responda apenas sobre esse item.
+- Não descreva todo o subprocesso quando a pergunta for específica.
+- Só apresente o fluxo completo quando a pergunta pedir "processo completo", "todas as etapas", "fluxo completo" ou "como funciona o subprocesso".
+- Quando a pergunta solicitar o procedimento completo, use a estrutura numerada abaixo.
+
+CONTEÚDO ESPERADO DA RESPOSTA:
+
+1. Adicionar a Extensão ao Catálogo
+O Extender deve registrar a extensão no Catálogo de Extensões BPMN com nome, versão, autores, propósito, área de aplicação, resumo dos conceitos, sintaxe concreta, status de validação/avaliação e informações de suporte ferramental.
+
+2. Endossar a Extensão BPMN (endosso interno)
+Se um especialista em extensões BPMN faz parte da equipe Extender, o endosso pode ser realizado internamente, verificando se a extensão está bem definida, compatível com BPMN e com artefatos de publicação prontos.
+
+3. Notificar Especialistas Externos (quando necessário)
+Se não houver especialista em extensões BPMN na equipe, especialistas externos devem ser notificados com a especificação validada/avaliada, entrada no catálogo e solicitação de endosso.
+
+4. Receber Decisão de Endosso
+Especialistas externos analisam a extensão e decidem se ela está bem definida, gerando os resultados possíveis: extensão BPMN endossada ou extensão BPMN não endossada.
+
+5. Publicar a Extensão BPMN
+Após o endosso e o registro no catálogo, o Extender deve disponibilizar a especificação, entrada no catálogo, exemplos, metamodelo, regras de validação, sintaxe concreta, informações de suporte ferramental e notas de versão.
+
+Artefatos/resultados esperados:
+- Entrada no catálogo para a extensão BPMN
+- Notificação de nova extensão (quando especialistas externos são consultados)
+- Extensão BPMN endossada ou não endossada
+- Pacote de publicação ou localização de acesso público
+- Extensão BPMN publicada
