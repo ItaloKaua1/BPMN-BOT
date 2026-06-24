@@ -58,26 +58,6 @@ Example Questions:
 - How do I create validation rules?
 - How do I define concrete syntax?
 
-## 03.5 Support Extension With Tool
-
-Main Topics:
-- Tool support strategy
-- Existing tool reuse
-- Tool implementation
-- Tool testing
-- Tool correction
-- Tool release
-
-Artifacts:
-- modelling_tool_for_extension
-- tool_test_results
-- extension_specification_developed
-
-Example Questions:
-- Should I create a new modelling tool?
-- Can I reuse BPMN.io?
-- How do I test the modelling tool?
-
 ## 04 Support Extension With Tool
 
 Main Topics:

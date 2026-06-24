@@ -11,7 +11,7 @@
 | Como verificar se já existe uma extensão semelhante?              | 01_analyse_need_for_extension.md       |
 | Como usar o catálogo de extensões BPMN?                           | 01_analyse_need_for_extension.md       |
 | Como identificar conceitos que BPMN não representa adequadamente? | 01_analyse_need_for_extension.md       |
-| Como preencher o BPMN Conformity Checklist?                       | artifact_bpmn_conformity_checklist.md  |
+| Como preencher o BPMN Conformity Checklist?                       | 01_analyse_need_for_extension.md       |
 
 
 | Pergunta                                                              | Documento Esperado                                     |
@@ -22,7 +22,7 @@
 | Como relacionar conceitos da extensão com elementos BPMN?             | 02_describe_extension_concepts.md                      |
 | Como integrar novos conceitos à BPMN?                                 | 02_describe_extension_concepts.md                      |
 | Como identificar equivalências entre conceitos da extensão e BPMN?    | 02_describe_extension_concepts.md                      |
-| Quando devo consultar especialistas em extensões BPMN?                | 02_describe_extension_concepts.md                      |
+| Quando devo consultar especialistas em extensões BPMN?                | 06_consult_experts.md                                  |
 | Como documentar conceitos reutilizados?                               | artifact_extension_specification_concepts_described.md |
 | Como caracterizar estruturalmente uma extensão BPMN?                  | artifact_extension_specification_concepts_described.md |
 | Como decidir se um conceito deve ser especializado ou criado do zero? | 02_describe_extension_concepts.md                      |
@@ -34,9 +34,9 @@
 | Como criar regras de validação para uma extensão BPMN? | 03_develop_bpmn_extension.md                                          |
 | Como definir a sintaxe concreta da extensão?           | 03_develop_bpmn_extension.md                                          |
 | Como representar graficamente novos construtos?        | artifact_concrete_syntax_representations.md                           |
-| Como verificar completude de uma extensão BPMN?        | artifact_checklist_verification_completeness_consistency_conflicts.md |
-| Como verificar consistência de uma extensão BPMN?      | artifact_checklist_verification_completeness_consistency_conflicts.md |
-| Como identificar conflitos com BPMN?                   | artifact_checklist_verification_completeness_consistency_conflicts.md |
+| Como verificar completude de uma extensão BPMN?        | artifact_checklist_completeness_consistency_conflicts.md |
+| Como verificar consistência de uma extensão BPMN?      | artifact_checklist_completeness_consistency_conflicts.md |
+| Como identificar conflitos com BPMN?                   | artifact_checklist_completeness_consistency_conflicts.md |
 | Como definir restrições que não cabem no metamodelo?   | 03_develop_bpmn_extension.md                                          |
 | Como criar uma representação XML compatível com OMG?   | 03_develop_bpmn_extension.md                                          |
 | Como relacionar o metamodelo com BPMN?                 | 03_develop_bpmn_extension.md                                          |
@@ -65,7 +65,7 @@
 | Como identificar melhorias durante o uso da extensão?              | 05_validate_and_evaluate_extension.md                   |
 | O que fazer quando são encontradas limitações durante a modelagem? | 05_validate_and_evaluate_extension.md                   |
 | Como registrar correções identificadas durante o uso?              | 05_validate_and_evaluate_extension.md                   |
-| Quando devo consultar especialistas?                               | 05_validate_and_evaluate_extension.md                   |
+| Quando devo consultar especialistas?                               | 06_consult_experts.md                                   |
 | Como decidir se a extensão deve ser formalmente avaliada?          | 05_validate_and_evaluate_extension.md                   |
 | Quais métodos podem ser usados para avaliar uma extensão BPMN?     | 05_validate_and_evaluate_extension.md                   |
 | Quando devo executar um experimento?                               | 05_validate_and_evaluate_extension.md                   |
@@ -81,7 +81,7 @@
 | Pergunta                                                        | Documento Esperado                         |
 | --------------------------------------------------------------- | ------------------------------------------ |
 | Como consultar especialistas em extensões BPMN?                 | 06_consult_experts.md                      |
-| Quem são os especialistas em extensões BPMN?                    | artifact_list_of_bpmn_extension_experts.md |
+| Quem são os especialistas em extensões BPMN?                    | list_of_bpmn_extension_experts.md |
 | Quando devo consultar especialistas BPMN?                       | 06_consult_experts.md                      |
 | Quando devo consultar especialistas do domínio?                 | 06_consult_experts.md                      |
 | Como selecionar especialistas para revisão?                     | 06_consult_experts.md                      |
@@ -96,7 +96,7 @@
 | Como identificar construtos impactados por uma recomendação?    | 06_consult_experts.md                      |
 | Como distinguir feedback BPMN de feedback do domínio?           | 06_consult_experts.md                      |
 | Como saber se a extensão foi validada por especialistas?        | 06_consult_experts.md                      |
-| Quais pesquisadores podem ser consultados sobre extensões BPMN? | artifact_list_of_bpmn_extension_experts.md |
+| Quais pesquisadores podem ser consultados sobre extensões BPMN? | list_of_bpmn_extension_experts.md |
 
 
 
