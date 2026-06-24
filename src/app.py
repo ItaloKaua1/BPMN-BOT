@@ -9,7 +9,10 @@ from llama_index.core import (
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 from llama_index.llms.ollama import Ollama
 
-from preparedata import carregar_documentos_csv
+from preparedata import (
+    carregar_documentos_csv,
+    carregar_documentos_markdown,
+)
 
 from catalog_query import (
     autores_mais_frequentes,
@@ -45,9 +48,10 @@ MAPA_DOCUMENTOS = {
         "analisar necessidade", "analyse need",
         "extensão semelhante", "extensao semelhante",
         "modelar usando apenas bpmn padrão",
-        "registrar dificuldades encontradas",
         "identificar limitações da bpmn",
         "identificar conceitos que bpmn não representa",
+        "preencher o bpmn conformity checklist",
+        "bpmn conformity checklist",
     ],
     "02_describe_extension_concepts.md": [
         "conceitos minha extensão deve introduzir",
@@ -56,8 +60,6 @@ MAPA_DOCUMENTOS = {
         "reutilizar construtos de extensões", "reutilizar construtos existentes",
         "integrar novos conceitos à bpmn", "relacionar conceitos da extensão",
         "equivalências entre conceitos", "especializado ou criado do zero",
-        "documentar conceitos reutilizados",
-        "caracterizar estruturalmente uma extensão",
         "identificar equivalências",
     ],
     "03_develop_bpmn_extension.md": [
@@ -92,6 +94,16 @@ MAPA_DOCUMENTOS = {
         "implementar a extensão em ferramenta",
         "posso reutilizar bpmn.io",
         "posso usar meta4model",
+        "adapto uma ferramenta existente",
+        "crio uma nova ferramenta de modelagem",
+        "adaptar ferramenta existente",
+        "criar nova ferramenta de modelagem",
+        "decidir se adapto uma ferramenta existente",
+        "decidir se crio uma nova ferramenta",
+        "usuários não conseguiriam aplicar a extensão",
+        "usuarios nao conseguiriam aplicar a extensao",
+        "aplicar a extensão apenas lendo a especificação",
+        "aplicar a extensao apenas lendo a especificacao",
     ],
     "05_validate_and_evaluate_extension.md": [
         "como validar uma extensão bpmn",
@@ -106,18 +118,26 @@ MAPA_DOCUMENTOS = {
         "quando devo executar um experimento",
         "quando devo executar um estudo de caso",
         "quando devo executar um survey",
-        "registrar resultados de avaliação",
         "extensão está pronta para validação",
         "extensão está pronta para avaliação",
-        "extension specification validated",
-        "extension specification evaluated",
+        "pronta para validação",
+        "pronta para avaliação",
+        "pronta para validacao",
+        "pronta para avaliacao",
+        "ready for validation",
+        "ready for evaluation",
         "gerar a extension specification",
+        "difference between validation and evaluation",
+        "diferença entre validação e avaliação",
+        "diferenca entre validacao e avaliacao",
+        "validação e avaliação",
+        "validacao e avaliacao",
     ],
     "06_consult_experts.md": [
         "consultar especialistas em extensões bpmn",
         "consultar especialista bpmn",
-        "quem são os especialistas em extensões bpmn",
         "quando devo consultar especialistas bpmn",
+        "quando devo consultar especialistas",
         "quando devo consultar especialistas do domínio",
         "selecionar especialistas para revisão",
         "informações devem ser enviadas aos especialistas",
@@ -131,7 +151,6 @@ MAPA_DOCUMENTOS = {
         "distinguir feedback bpmn de feedback do domínio",
         "construtos impactados por uma recomendação",
         "extensão foi validada por especialistas",
-        "quais pesquisadores podem ser consultados",
         "como consultar especialistas",
         "consultar especialistas",
         "consulta a especialistas",
@@ -159,6 +178,26 @@ MAPA_DOCUMENTOS = {
         "pacote de publicação",
         "suporte ferramental no catálogo",
     ],
+    "artifact_modelling_and_observations.md": [
+        "registrar dificuldades encontradas durante a modelagem",
+        "registrar dificuldades encontradas",
+        "dificuldades encontradas durante a modelagem",
+        "observações de modelagem",
+        "observacoes de modelagem",
+        "modelling observations",
+        "modelling difficulties",
+        "dificuldades de modelagem",
+    ],
+    "artifact_extension_specification_concepts_described.md": [
+        "documentar conceitos reutilizados",
+        "conceitos reutilizados",
+        "caracterizar estruturalmente uma extensão",
+        "caracterização estrutural",
+        "caracterizacao estrutural",
+        "estruturalmente uma extensão bpmn",
+        "conceptual characterization",
+        "specification concepts described",
+    ],
     "artifact_concrete_syntax_representations.md": [
         "representar graficamente novos construtos",
         "representação gráfica de construtos",
@@ -172,6 +211,16 @@ MAPA_DOCUMENTOS = {
         "como verificar completude de uma extensão",
         "como verificar consistência de uma extensão",
         "como identificar conflitos com bpmn",
+    ],
+    "list_of_bpmn_extension_experts.md": [
+        "quem são os especialistas em extensões bpmn",
+        "quem sao os especialistas em extensoes bpmn",
+        "especialistas em extensões bpmn",
+        "pesquisadores bpmn",
+        "quais pesquisadores podem ser consultados",
+        "bpmn extension experts",
+        "lista de especialistas bpmn",
+        "lista de pesquisadores bpmn",
     ],
     "artifact_extension_specification_developed.md": [
         "extension specification developed",
@@ -275,22 +324,8 @@ def carregar_catalogo():
 def carregar_conhecimento():
     documentos = []
 
-    # docs/process (inclui docs/process/artifacts/ recursivamente)
-    documentos.extend(
-        carregar_documentos_diretorio(ROOT_DIR / "docs" / "process", "processo")
-    )
+    documentos.extend(carregar_documentos_markdown())
 
-    # docs/metamodel
-    documentos.extend(
-        carregar_documentos_diretorio(ROOT_DIR / "docs" / "metamodel", "metamodelo")
-    )
-
-    # docs/guidelines (opcional)
-    documentos.extend(
-        carregar_documentos_diretorio(ROOT_DIR / "docs" / "guidelines", "guideline")
-    )
-
-    # Arquivos individuais de suporte ao RAG
     documentos.extend(
         carregar_arquivos_individuais(
             [
@@ -393,6 +428,24 @@ def escolher_engine(pergunta):
 # Prompt
 # ---------------------------------------------------------------------------
 
+PROMPTS_ESPECIALIZADOS = {
+    "01_analyse_need_for_extension.md": "prompt_01_analyse_need.txt",
+    "02_describe_extension_concepts.md": "prompt_02_describe_concepts.txt",
+    "03_develop_bpmn_extension.md": "prompt_03_develop_extension.txt",
+    "04_support_extension_with_tool.md": "prompt_04_support_tool.txt",
+    "05_validate_and_evaluate_extension.md": "prompt_05_validate_evaluate.txt",
+    "06_consult_experts.md": "prompt_06_consult_experts.txt",
+    "07_publicise_bpmn_extension.md": "prompt_07_publicise_extension.txt",
+}
+
+
+def carregar_prompt(nome_arquivo):
+    caminho = ROOT_DIR / "prompts" / nome_arquivo
+    if not caminho.exists():
+        return ""
+    return caminho.read_text(encoding="utf-8")
+
+
 def criar_prompt(pergunta, tipo_base, documentos_alvo=None):
     bloco_documentos = ""
     if documentos_alvo:
@@ -404,337 +457,20 @@ def criar_prompt(pergunta, tipo_base, documentos_alvo=None):
 
     bloco_especializado = ""
     if documentos_alvo:
-        if "01_analyse_need_for_extension.md" in documentos_alvo:
-            bloco_especializado = """
-            A pergunta refere-se ao subprocesso 1 - Analyse the Need for Extension.
-
-            Responda apenas com base nas atividades deste subprocesso.
-
-            Priorize:
-            - estudo do domínio ou área de aplicação
-            - identificação dos conceitos a serem introduzidos
-            - verificação de adequação do BPMN padrão (BPMN conformity checklist)
-            - modelagem de exemplo com BPMN padrão e observações de modelagem
-            - busca por extensões BPMN relacionadas no catálogo
-            - consulta a especialistas em domínio ou BPMN, quando necessário
-            - geração da Extension Specification [Analysed]
-
-            Não descreva etapas de descrição de conceitos, desenvolvimento de metamodelo,
-            suporte ferramental, validação, avaliação ou publicação.
-
-            A resposta deve seguir exatamente esta estrutura:
-
-            1. Estudar/Revisar o Domínio ou Área de Aplicação
-            Explique que o Extender deve identificar o propósito da extensão, a área de aplicação, aspectos práticos e referências relevantes.
-
-            2. Identificar os Conceitos a Serem Introduzidos
-            Explique que o Extender deve listar os conceitos que a extensão introduzirá no BPMN, descrevendo nome, definição, fonte e relevância de cada um.
-
-            3. Verificar se o BPMN Padrão Atende os Requisitos
-            Explique que o Extender deve usar o BPMN conformity checklist para avaliar se a notação BPMN é adequada e se a sintaxe padrão já modela a necessidade.
-
-            4. Modelar um Exemplo com BPMN Padrão
-            Explique que o Extender deve criar um modelo BPMN de exemplo com os conceitos identificados e registrar as observações de modelagem.
-
-            5. Buscar Extensões BPMN Relacionadas
-            Explique que o Extender deve pesquisar o Catálogo de Extensões BPMN para verificar se alguma extensão existente já atende a necessidade.
-
-            6. Gerar a Extension Specification [Analysed]
-            Explique que, se o BPMN padrão for insuficiente e nenhuma extensão existente satisfizer a necessidade, o Extender deve gerar a especificação analisada com toda a evidência coletada.
-
-            Artefatos/resultados esperados:
-            - Lista de referências e pesquisadores consultados
-            - Lista de conceitos a serem introduzidos
-            - BPMN conformity checklist
-            - Observações de modelagem
-            - Lista de extensões BPMN relacionadas à proposta
-            - Extension specification [Analysed]
-            - Decisão: existe necessidade da extensão
-            """
-        elif "02_describe_extension_concepts.md" in documentos_alvo:
-            bloco_especializado = """
-            A pergunta refere-se ao subprocesso 2 - Describe Concepts of the BPMN Extension.
-
-            Responda apenas com base nas atividades deste subprocesso.
-
-            Priorize:
-            - busca e seleção de construtos BPMN reutilizáveis
-            - descrição dos conceitos da extensão (nome, definição, propósito, relação com BPMN)
-            - análise de como integrar os construtos da extensão com o BPMN
-            - análise de equivalência entre construtos propostos e construtos BPMN existentes
-            - consulta a especialistas em extensões BPMN, quando necessário
-            - geração da Extension Specification [Concepts Described]
-
-            Não descreva etapas de análise da necessidade, desenvolvimento de metamodelo,
-            sintaxe concreta, suporte ferramental, validação, avaliação ou publicação.
-
-            A resposta deve seguir exatamente esta estrutura:
-
-            1. Buscar e Selecionar Construtos a Serem Reutilizados
-            Explique que o Extender deve identificar construtos BPMN ou de extensões existentes que possam ser reutilizados, registrando nome, fonte, motivo de reutilização e limitações.
-
-            2. Descrever os Conceitos da Extensão
-            Explique que cada conceito deve ser descrito com nome, definição, propósito, relação com BPMN, classificação (novo, reutilizado ou adaptado) e exemplos de uso.
-
-            3. Analisar como Integrar os Construtos da Extensão com o BPMN
-            Explique que o Extender deve mapear cada conceito ao construto BPMN que ele estende, especializa ou complementa, identificando o tipo de relação (estrutural, semântica, notacional) e possíveis conflitos.
-
-            4. Analisar a Equivalência entre os Construtos
-            Explique que o Extender deve verificar se algum construto proposto é equivalente a construtos BPMN ou de extensões existentes, preferindo reutilização quando possível.
-
-            5. Gerar a Extension Specification [Concepts Described]
-            Explique que o Extender deve consolidar construtos reutilizados, conceitos introduzidos, relações com BPMN e caracterização conceitual e estrutural na especificação com conceitos descritos.
-
-            Artefatos/resultados esperados:
-            - Lista de construtos a serem reutilizados
-            - Lista de conceitos a serem introduzidos [com descrição dos conceitos]
-            - Lista de relações entre construtos da extensão e construtos BPMN
-            - Caracterização conceitual e estrutural
-            - Extension specification [Concepts described]
-            - Decisão: extensão BPMN conceitualizada
-            """
-        elif "03_develop_bpmn_extension.md" in documentos_alvo:
-            bloco_especializado = """
-            A pergunta refere-se ao subprocesso 3 - Develop BPMN Extension.
-
-            Responda apenas com base nas atividades deste subprocesso.
-
-            Priorize:
-            - definição do metamodelo da extensão (elementos, atributos, relacionamentos, cardinalidades)
-            - definição de regras de validação não representáveis no metamodelo
-            - definição da sintaxe concreta (representação visual de cada construto)
-            - verificação de completude, consistência e conflitos (checklist)
-            - decisão sobre suporte ferramental
-            - geração da Extension Specification [Developed]
-
-            Não descreva etapas de análise da necessidade, descrição de conceitos,
-            implementação da ferramenta de modelagem, validação, avaliação ou publicação.
-
-            A resposta deve seguir exatamente esta estrutura:
-
-            1. Definir o Metamodelo da Extensão
-            Explique que o Extender deve mapear cada conceito descrito para um elemento do metamodelo BPMN, especificando atributos, relacionamentos, cardinalidades, restrições e, quando aplicável, o esquema XML.
-
-            2. Definir Regras de Validação
-            Explique que restrições que não podem ser representadas diretamente no metamodelo devem ser expressas como regras de validação explícitas, com identificador, condição, severidade e justificativa.
-
-            3. Definir a Sintaxe Concreta
-            Explique que cada construto da extensão deve ter uma representação visual definida (marcador, ícone, forma, cor, rótulo ou relacionamento), compatível com a notação BPMN.
-
-            4. Verificar Completude, Consistência e Conflitos
-            Explique que o Extender deve aplicar o checklist de verificação para garantir que todos os conceitos estão representados no metamodelo, que a sintaxe concreta está alinhada e que não há conflitos com o BPMN padrão.
-
-            5. Decidir sobre Suporte Ferramental
-            Explique que o Extender deve decidir se a extensão será suportada por uma ferramenta de modelagem e registrar a decisão, mesmo que seja negativa.
-
-            6. Gerar a Extension Specification [Developed]
-            Explique que o Extender deve consolidar metamodelo, regras de validação, sintaxe concreta, resultado do checklist e decisão sobre ferramenta na especificação desenvolvida.
-
-            Artefatos/resultados esperados:
-            - Metamodelo da extensão
-            - Regras de validação da extensão
-            - Lista de representações de sintaxe concreta
-            - Checklist de verificação de problemas
-            - Decisão sobre suporte ferramental
-            - Extension specification [Developed]
-            - Decisão: extensão BPMN desenvolvida
-            """
-        elif "04_support_extension_with_tool.md" in documentos_alvo:
-            bloco_especializado = """
-            A pergunta é sobre o subprocesso 3.5 Support the Extension With a Modelling Tool.
-
-            Responda somente sobre suporte ferramental.
-            Nao inclua etapas de validação, avaliação, publicação, endorsement ou catálogo.
-            Nao inclua análise de domínio nem descrição de conceitos, exceto se forem necessários como entrada já existente.
-
-            A resposta deve seguir exatamente esta estrutura:
-
-            1. Decidir a estratégia de ferramenta
-            Explique que o Extender deve decidir se vai usar uma ferramenta existente ou criar uma nova.
-
-            2. Adicionar construtos a uma ferramenta existente
-            Explique que, se não houver intenção de criar uma nova ferramenta, os construtos devem ser adicionados/configurados na ferramenta existente.
-
-            3. Implementar uma nova ferramenta, se necessário
-            Explique que, se uma ferramenta dedicada for necessária, ela deve suportar metamodelo, sintaxe concreta, criação/edição de construtos, validação, persistência, importação/exportação e integração com BPMN.
-
-            4. Testar a ferramenta
-            Explique que a ferramenta deve ser testada verificando criação de construtos, renderização da sintaxe concreta, edição de propriedades, regras de validação, salvamento/carregamento e compatibilidade BPMN.
-
-            5. Corrigir problemas
-            Explique que problemas identificados devem ser corrigidos e a ferramenta deve ser testada novamente.
-
-            6. Disponibilizar a ferramenta
-            Explique que, quando não houver correções pendentes, a ferramenta deve ser disponibilizada aos usuários.
-
-            Artefatos/resultados esperados:
-            - Modelling tool for the extension
-            - Tool test results
-            - Corrected modelling tool
-            - Extension available
-            - Extension applied
-            """
-        elif "05_validate_and_evaluate_extension.md" in documentos_alvo:
-            bloco_especializado = """
-            A pergunta refere-se ao subprocesso 4 - Validate and Evaluate the BPMN Extension.
-
-            Responda apenas com base nas atividades deste subprocesso.
-
-            Priorize:
-            - uso prático da extensão em cenários de modelagem realistas
-            - aplicação de correções identificadas durante o uso
-            - revisão por especialistas em extensões BPMN e, quando aplicável, especialistas no domínio
-            - aplicação de correções sugeridas por especialistas
-            - avaliação formal da extensão (experimento controlado, estudo de caso ou survey)
-            - aplicação de melhorias identificadas na avaliação
-            - geração da Extension Specification [Validated/Evaluated]
-
-            Não descreva etapas de análise da necessidade, descrição de conceitos, desenvolvimento,
-            suporte ferramental, registro no catálogo, endosso ou publicação.
-
-            A resposta deve seguir exatamente esta estrutura:
-
-            1. Usar a Extensão BPMN para Modelar um Sistema
-            Explique que o Extender deve aplicar a extensão em cenários de modelagem realistas, documentando decisões de modelagem, limitações identificadas e oportunidades de melhoria.
-
-            2. Aplicar Correções do Uso Prático
-            Explique que correções identificadas durante o uso devem ser aplicadas na especificação antes de prosseguir para a revisão por especialistas.
-
-            3. Consultar Especialistas
-            Explique que a extensão deve ser submetida à revisão de especialistas em extensões BPMN e, quando relevante, especialistas no domínio, coletando recomendações, correções e sugestões.
-
-            4. Aplicar Correções dos Especialistas
-            Explique que o Extender deve incorporar o feedback recebido, verificando que as modificações não introduzem inconsistências, incompletude ou conflitos.
-
-            5. Avaliar a Extensão BPMN (opcional)
-            Explique que a extensão pode ser avaliada formalmente por meio de experimento controlado, estudo de caso ou survey, registrando método, participantes, resultados e melhorias identificadas.
-
-            6. Gerar a Extension Specification [Validated/Evaluated]
-            Explique que o Extender deve consolidar exemplos de uso, feedback de especialistas, resultados da avaliação e melhorias aplicadas na especificação validada/avaliada.
-
-            Artefatos/resultados esperados:
-            - Exemplos de uso
-            - Resultados da revisão por especialistas
-            - Resultados da avaliação
-            - Melhorias identificadas e aplicadas
-            - Extension specification [Validated/Evaluated]
-            - Decisão: extensão BPMN avaliada
-            """
-        elif "06_consult_experts.md" in documentos_alvo:
-            bloco_especializado = """
-            A pergunta refere-se ao subprocesso 4.3 - Consult Experts.
-
-            Responda apenas com base nas atividades deste subprocesso.
-
-            Priorize:
-            - identificação do tipo de especialista necessário (BPMN ou domínio)
-            - preparação do material a ser enviado aos especialistas
-            - coleta e organização do feedback recebido
-            - registro de recomendações, correções e impacto em cada construto
-
-            Não descreva etapas de desenvolvimento do metamodelo, sintaxe concreta ou regras de validação,
-            uso prático para modelagem, avaliação formal, publicação, catálogo ou endosso.
-
-            A resposta deve seguir exatamente esta estrutura:
-
-            1. Consultar Especialistas em Extensões BPMN
-            Explique que o Extender deve identificar especialistas em extensões BPMN e enviar a especificação desenvolvida, modelos de exemplo, problemas identificados e questões específicas.
-
-            2. Consultar Especialistas no Domínio/Área de Aplicação
-            Explique que este passo é executado apenas quando a extensão está relacionada a um domínio específico (como segurança, saúde, IoT, robótica), coletando conceitos ausentes, inconsistências terminológicas e observações práticas.
-
-            3. Especialistas em BPMN Analisam a Extensão
-            Explique que os especialistas devem analisar definições de construtos, integração com BPMN, sintaxe concreta, metamodelo e regras de validação, produzindo feedback de especialistas BPMN.
-
-            4. Especialistas no Domínio Analisam a Extensão
-            Explique que os especialistas devem analisar correção de domínio, completude conceitual e aplicabilidade prática, produzindo feedback de especialistas no domínio.
-
-            5. Receber e Registrar o Feedback
-            Explique que o Extender deve registrar cada recomendação com especialista, recomendação, construto impactado e ação tomada, tanto para feedback BPMN quanto para feedback de domínio.
-
-            Artefatos/resultados esperados:
-            - Feedback de especialistas em BPMN
-            - Feedback de especialistas no domínio
-            - Registros de consulta a especialistas
-            - Lista de recomendações
-            - Correções e melhorias identificadas
-            - Extensão BPMN validada por especialistas
-            """
-        elif "07_publicise_bpmn_extension.md" in documentos_alvo:
-            bloco_especializado = """
-            A pergunta refere-se ao subprocesso 6 - Publicise the BPMN Extension.
-
-            Responda apenas com base nas atividades deste subprocesso.
-
-            Priorize:
-            - registro da extensão no Catálogo de Extensões BPMN
-            - endosso da extensão (interno ou externo)
-            - publicação da extensão com todos os artefatos necessários
-
-            Não descreva etapas de análise da necessidade, descrição de conceitos, desenvolvimento,
-            suporte ferramental, validação ou avaliação (já concluídas neste ponto).
-
-            A resposta deve seguir exatamente esta estrutura:
-
-            1. Adicionar a Extensão ao Catálogo
-            Explique que o Extender deve registrar a extensão no Catálogo de Extensões BPMN com nome, versão, autores, propósito, área de aplicação, resumo dos conceitos, sintaxe concreta, status de validação/avaliação e informações de suporte ferramental.
-
-            2. Endossar a Extensão BPMN (endosso interno)
-            Explique que, se um especialista em extensões BPMN faz parte da equipe Extender, o endosso pode ser realizado internamente, verificando se a extensão está bem definida, compatível com BPMN e com artefatos de publicação prontos.
-
-            3. Notificar Especialistas Externos (quando necessário)
-            Explique que, se não houver especialista em extensões BPMN na equipe, especialistas externos devem ser notificados com a especificação validada/avaliada, entrada no catálogo e solicitação de endosso.
-
-            4. Receber Decisão de Endosso
-            Explique que especialistas externos analisam a extensão e decidem se ela está bem definida, gerando os resultados possíveis: extensão BPMN endossada ou extensão BPMN não endossada.
-
-            5. Publicar a Extensão BPMN
-            Explique que, após o endosso e o registro no catálogo, o Extender deve disponibilizar a especificação, entrada no catálogo, exemplos, metamodelo, regras de validação, sintaxe concreta, informações de suporte ferramental e notas de versão.
-
-            Artefatos/resultados esperados:
-            - Entrada no catálogo para a extensão BPMN
-            - Notificação de nova extensão (quando especialistas externos são consultados)
-            - Extensão BPMN endossada ou não endossada
-            - Pacote de publicação ou localização de acesso público
-            - Extensão BPMN publicada
-            """
-    return f"""Voce e o BPMN-BOT, um assistente especializado em extensoes BPMN.
-
-Base consultada: {tipo_base}.
-{bloco_documentos}
-Instrucoes:
-- Use somente as fontes recuperadas.
-- Responda em portugues.
-- Nao mostre raciocinio interno nem cite nomes de arquivos.
-- Se houver documento alvo, nao use informações de outros subprocessos para completar a resposta.
-- Responda diretamente ao usuario, como um assistente orientando uma pessoa.
-- Nao comece dizendo "o usuario esta no arquivo X".
-- Quando citar artefatos, use exatamente os nomes encontrados nas fontes.
-- Não renomeie artefatos.
-- Não crie artefatos equivalentes.
-- Não adicione resultados de subprocessos diferentes.
-
-Escopo da resposta:
-- Se a pergunta for sobre uma etapa específica, uma decisão, um artefato ou um termo, responda somente essa parte.
-- Apresente o fluxo completo do subprocesso apenas quando a pergunta pedir explicitamente o processo inteiro.
-
-Se a pergunta for sobre "como fazer" algo no processo:
-- Comece com uma frase direta resumindo o que deve ser feito.
-- Apresente os passos em ordem numerada.
-- Para cada passo, descreva o objetivo brevemente.
-- Informe quais artefatos sao produzidos ou utilizados em cada passo.
-- Quando houver uma decisao importante, explique os criterios para tomar essa decisao.
-- Termine indicando o proximo passo ou o artefato esperado ao final.
-{bloco_especializado}
-Se a pergunta for sobre catalogo:
-- Responda somente com base nos registros recuperados.
-- Nao invente publicacoes, autores ou dominios.
-
-Se as fontes recuperadas nao forem suficientes, diga:
-"A base atual nao contem informacao suficiente para confirmar isso."
-
-Pergunta do usuario:
-{pergunta}""".strip()
+        for documento in documentos_alvo:
+            nome_prompt = PROMPTS_ESPECIALIZADOS.get(documento)
+            if nome_prompt:
+                bloco_especializado = carregar_prompt(nome_prompt)
+                break
+
+    base_prompt = carregar_prompt("base_prompt.txt")
+
+    return base_prompt.format(
+        tipo_base=tipo_base,
+        bloco_documentos=bloco_documentos,
+        bloco_especializado=bloco_especializado,
+        pergunta=pergunta,
+    ).strip()
 
 
 # ---------------------------------------------------------------------------
@@ -869,11 +605,11 @@ def tentar_responder_catalogo_estruturado(pergunta):
     if "áreas de aplicação" in pergunta_lower or "areas de aplicacao" in pergunta_lower:
         return listar_dominios_e_areas()
 
-    if "existe" in pergunta_lower and "extensão" in pergunta_lower and "para" in pergunta_lower:
+    if re.search(r"\bexiste\b", pergunta_lower) and "extensão" in pergunta_lower and "para" in pergunta_lower:
         termo = pergunta_lower.split("para", 1)[1].replace("?", "").replace(".", "").strip()
         return buscar_publicacoes_por_termo(termo)
 
-    if "existe" in pergunta_lower and "extensao" in pergunta_lower and "para" in pergunta_lower:
+    if re.search(r"\bexiste\b", pergunta_lower) and "extensao" in pergunta_lower and "para" in pergunta_lower:
         termo = pergunta_lower.split("para", 1)[1].replace("?", "").replace(".", "").strip()
         return buscar_publicacoes_por_termo(termo)
 
@@ -971,12 +707,15 @@ while True:
         testar_perguntas_rag(modo_verbose="-v" in pergunta.lower())
         continue
 
-    resposta_estruturada = tentar_responder_catalogo_estruturado(pergunta)
-    if resposta_estruturada:
-        print("\nResposta:")
-        print(resposta_estruturada)
-        print("\nFonte: consulta estruturada com pandas nos CSVs do catálogo\n")
-        continue
+    documentos_alvo = identificar_documentos_alvo(pergunta)
+
+    if not documentos_alvo:
+        resposta_estruturada = tentar_responder_catalogo_estruturado(pergunta)
+        if resposta_estruturada:
+            print("\nResposta:")
+            print(resposta_estruturada)
+            print("\nFonte: consulta estruturada com pandas nos CSVs do catálogo\n")
+            continue
 
     resposta_fluxo = tentar_responder_fluxo_guiado(pergunta)
     if resposta_fluxo:
@@ -985,7 +724,6 @@ while True:
         print("\nFonte: fluxo guiado de criação de extensão BPMN\n")
         continue
 
-    documentos_alvo = identificar_documentos_alvo(pergunta)
     engine, tipo_base = escolher_engine(pergunta)
 
     print(f"\nBase escolhida: {tipo_base}")
