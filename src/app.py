@@ -1,4 +1,5 @@
 import re
+import textwrap
 from pathlib import Path
 
 from llama_index.core import (
@@ -37,8 +38,10 @@ Settings.embed_model = HuggingFaceEmbedding(
 # ---------------------------------------------------------------------------
 # Mapa de roteamento: keywords -> documento processual esperado
 # ---------------------------------------------------------------------------
+_DOC_01 = "01_analyse_need_for_extension.md"
+
 MAPA_DOCUMENTOS = {
-    "01_analyse_need_for_extension.md": [
+    _DOC_01: [
         "bpmn é adequado", "bpmn adequado para meu domínio",
         "limitações da bpmn", "limitacoes da bpmn",
         "justificar a criação de uma extensão", "justificar criacao",
@@ -52,6 +55,31 @@ MAPA_DOCUMENTOS = {
         "identificar conceitos que bpmn não representa",
         "preencher o bpmn conformity checklist",
         "bpmn conformity checklist",
+        "preciso criar uma extensão bpmn",
+        "preciso criar uma extensao bpmn",
+        "realmente preciso criar uma extensão bpmn",
+        "realmente preciso criar uma extensao bpmn",
+        "como identificar se preciso criar",
+        "como saber se preciso criar",
+        "como decidir se devo criar uma extensão bpmn",
+        "como decidir se devo criar uma extensao bpmn",
+        "quando devo criar uma extensão bpmn",
+        "quando devo criar uma extensao bpmn",
+        "quando criar uma extensão bpmn",
+        "quando criar uma extensao bpmn",
+        "como avaliar a necessidade de uma extensão bpmn",
+        "como avaliar a necessidade de uma extensao bpmn",
+        "como identificar a necessidade de uma extensão bpmn",
+        "como identificar a necessidade de uma extensao bpmn",
+        "existe necessidade de criar uma extensão",
+        "existe necessidade de criar uma extensao",
+        "devo estender o bpmn",
+        "bpmn padrão é suficiente",
+        "bpmn padrao e suficiente",
+        "minha necessidade já é atendida pelo bpmn",
+        "minha necessidade ja e atendida pelo bpmn",
+        "quando uma extensão bpmn não é necessária",
+        "quando uma extensao bpmn nao e necessaria",
     ],
     "02_describe_extension_concepts.md": [
         "conceitos minha extensão deve introduzir",
@@ -393,8 +421,47 @@ estado_conversa = {
 # Roteamento
 # ---------------------------------------------------------------------------
 
+# Perguntas que casem com qualquer entrada aqui retornam EXCLUSIVAMENTE o
+# documento listado, sem misturar outros subprocessos.
+DOCUMENTOS_PRIORITARIOS = {
+    _DOC_01: [
+        "preciso criar uma extensão bpmn",
+        "preciso criar uma extensao bpmn",
+        "realmente preciso criar uma extensão bpmn",
+        "realmente preciso criar uma extensao bpmn",
+        "como identificar se preciso criar",
+        "como saber se preciso criar",
+        "como decidir se devo criar uma extensão bpmn",
+        "como decidir se devo criar uma extensao bpmn",
+        "devo estender o bpmn",
+        "bpmn padrão é suficiente",
+        "bpmn padrao e suficiente",
+        "minha necessidade já é atendida pelo bpmn",
+        "minha necessidade ja e atendida pelo bpmn",
+        "existe necessidade de criar uma extensão",
+        "existe necessidade de criar uma extensao",
+        "como avaliar a necessidade de uma extensão bpmn",
+        "como avaliar a necessidade de uma extensao bpmn",
+        "como identificar a necessidade de uma extensão bpmn",
+        "como identificar a necessidade de uma extensao bpmn",
+        "quando devo criar uma extensão bpmn",
+        "quando devo criar uma extensao bpmn",
+        "quando uma extensão bpmn não é necessária",
+        "quando uma extensao bpmn nao e necessaria",
+        "extensão bpmn não é necessária",
+        "extensao bpmn nao e necessaria",
+    ],
+}
+
+
 def identificar_documentos_alvo(pergunta):
     pergunta_lower = pergunta.lower()
+
+    for nome_doc, palavras_chave in DOCUMENTOS_PRIORITARIOS.items():
+        for kw in palavras_chave:
+            if kw in pergunta_lower:
+                return [nome_doc]
+
     alvos = []
     for nome_doc, palavras_chave in MAPA_DOCUMENTOS.items():
         for kw in palavras_chave:
@@ -464,7 +531,7 @@ def escolher_engine(pergunta, documentos_alvo=None):
 # ---------------------------------------------------------------------------
 
 PROMPTS_ESPECIALIZADOS = {
-    "01_analyse_need_for_extension.md": "prompt_01_analyse_need.txt",
+    _DOC_01: "prompt_01_analyse_need.txt",
     "02_describe_extension_concepts.md": "prompt_02_describe_concepts.txt",
     "03_develop_bpmn_extension.md": "prompt_03_develop_extension.txt",
     "04_support_extension_with_tool.md": "prompt_04_support_tool.txt",
@@ -732,6 +799,18 @@ def testar_perguntas_rag(modo_verbose=False):
 LABEL_RESPOSTA = "\nResposta:"
 
 # ---------------------------------------------------------------------------
+def imprimir_formatado(texto, largura=100):
+    for bloco in str(texto).splitlines():
+        bloco = bloco.strip()
+        if not bloco:
+            print()
+            continue
+        if bloco.startswith(("-", "*")) or re.match(r"^\d+\.", bloco):
+            print(textwrap.fill(bloco, width=largura, subsequent_indent="   "))
+        else:
+            print(textwrap.fill(bloco, width=largura))
+
+
 # Loop principal
 # ---------------------------------------------------------------------------
 
@@ -759,22 +838,18 @@ while True:
         resposta_estruturada = tentar_responder_catalogo_estruturado(pergunta)
         if resposta_estruturada:
             print(LABEL_RESPOSTA)
-            print(resposta_estruturada)
+            imprimir_formatado(resposta_estruturada)
             print("\nFonte: consulta estruturada com pandas nos CSVs do catálogo\n")
             continue
 
     resposta_fluxo = tentar_responder_fluxo_guiado(pergunta)
     if resposta_fluxo:
         print(LABEL_RESPOSTA)
-        print(resposta_fluxo)
+        imprimir_formatado(resposta_fluxo)
         print("\nFonte: fluxo guiado de criação de extensão BPMN\n")
         continue
 
     engine, tipo_base = escolher_engine(pergunta, documentos_alvo)
-
-    print(f"\nBase escolhida: {tipo_base}")
-    if documentos_alvo:
-        print(f"Documentos alvo: {', '.join(documentos_alvo)}")
 
     pergunta_expandida = _expandir_pergunta(pergunta, documentos_alvo)
     prompt = criar_prompt(pergunta_expandida, tipo_base, documentos_alvo)
@@ -785,16 +860,19 @@ while True:
         resposta = engine.query(prompt)
 
     print(LABEL_RESPOSTA)
-    print(resposta.response)
+    imprimir_formatado(resposta.response)
 
-    print("\nFontes recuperadas:")
-    for i, node in enumerate(resposta.source_nodes, start=1):
-        file_name = node.metadata.get("file_name")
-        dataset = node.metadata.get("dataset")
-        base = node.metadata.get("base")
-        origem = file_name or dataset or base or "fonte desconhecida"
-        print(f"\nFonte {i}: {origem}")
-        print(node.text[:300])
-        print("---")
+    fontes = []
+    for node in resposta.source_nodes:
+        origem = (
+            node.metadata.get("file_name")
+            or node.metadata.get("dataset")
+            or node.metadata.get("base")
+        )
+        if origem and origem not in fontes:
+            fontes.append(origem)
+
+    if fontes:
+        print(f"\nFontes: {', '.join(fontes)}")
 
     print("\n")
