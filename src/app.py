@@ -177,6 +177,21 @@ MAPA_DOCUMENTOS = {
         "conformidade com as diretrizes omg",
         "pacote de publicação",
         "suporte ferramental no catálogo",
+        "pronta para publicação",
+        "pronta para publicacao",
+        "extensão pronta para publicação",
+        "extensao pronta para publicacao",
+        "como sei se minha extensão está pronta para publicação",
+        "como sei se minha extensao esta pronta para publicacao",
+        "quando minha extensão pode ser publicada",
+        "quando minha extensao pode ser publicada",
+        "antes de publicar a extensão",
+        "antes de publicar a extensao",
+        "condições para publicação",
+        "condicoes para publicacao",
+        "requisitos para publicar",
+        "pronto para publicar",
+        "pronta para publicar",
     ],
     "artifact_modelling_and_observations.md": [
         "registrar dificuldades encontradas durante a modelagem",
@@ -418,8 +433,28 @@ def _executar_query(prompt, documentos_alvo, engine_padrao):
     return engine_padrao.query(prompt)
 
 
-def escolher_engine(pergunta):
-    if contem_alguma(pergunta, PALAVRAS_CATALOGO):
+def eh_contexto_de_processo(pergunta):
+    pergunta_lower = pergunta.lower()
+    expressoes = [
+        "minha extensão",
+        "minha extensao",
+        "publicar a extensão",
+        "publicar a extensao",
+        "pronta para publicação",
+        "pronta para publicacao",
+        "pronta para publicar",
+        "pronto para publicar",
+        "quando minha extensão",
+        "quando minha extensao",
+        "antes de publicar",
+    ]
+    return any(e in pergunta_lower for e in expressoes)
+
+
+def escolher_engine(pergunta, documentos_alvo=None):
+    if documentos_alvo:
+        return knowledge_engine, "conhecimento"
+    if contem_alguma(pergunta, PALAVRAS_CATALOGO) and not eh_contexto_de_processo(pergunta):
         return catalog_engine, "catalogo"
     return knowledge_engine, "conhecimento"
 
@@ -495,11 +530,8 @@ def extrair_dominio(pergunta):
     return pergunta.strip().rstrip(".,?")
 
 
-def tentar_responder_fluxo_guiado(pergunta):
-    global estado_conversa
-    pergunta_lower = pergunta.lower()
-
-    intencao_criar = (
+def _detectar_intencao_criar(pergunta_lower):
+    return (
         ("como criar" in pergunta_lower and "extensão bpmn" in pergunta_lower)
         or ("como criar" in pergunta_lower and "extensao bpmn" in pergunta_lower)
         or ("quero criar" in pergunta_lower and "extensão bpmn" in pergunta_lower)
@@ -507,6 +539,13 @@ def tentar_responder_fluxo_guiado(pergunta):
         or "criar extensão bpmn" in pergunta_lower
         or "criar extensao bpmn" in pergunta_lower
     )
+
+
+def tentar_responder_fluxo_guiado(pergunta):
+    global estado_conversa
+    pergunta_lower = pergunta.lower()
+
+    intencao_criar = _detectar_intencao_criar(pergunta_lower)
 
     if intencao_criar:
         estado_conversa["fluxo_ativo"] = "criacao_extensao"
@@ -566,20 +605,44 @@ def tentar_responder_fluxo_guiado(pergunta):
     return None
 
 
+def _buscar_por_ano_catalogo(pergunta_lower):
+    for ano in ["2019", "2020", "2021", "2022", "2023", "2024", "2025"]:
+        if ano in pergunta_lower and "public" in pergunta_lower:
+            return listar_publicacoes_por_ano(ano)
+    return None
+
+
+def _buscar_por_relacao_catalogo(pergunta_lower):
+    if "relacionadas a" in pergunta_lower:
+        termo = pergunta_lower.split("relacionadas a", 1)[1].replace(".", "").strip()
+        return buscar_publicacoes_por_termo(termo)
+    if "relacionados a" in pergunta_lower:
+        termo = pergunta_lower.split("relacionados a", 1)[1].replace(".", "").strip()
+        return buscar_publicacoes_por_termo(termo)
+    return None
+
+
+def _buscar_extensao_catalogo(pergunta_lower):
+    tem_existe = re.search(r"\bexiste\b", pergunta_lower)
+    tem_extensao = "extensão" in pergunta_lower or "extensao" in pergunta_lower
+    if tem_existe and tem_extensao and "para" in pergunta_lower:
+        termo = pergunta_lower.split("para", 1)[1].replace("?", "").replace(".", "").strip()
+        return buscar_publicacoes_por_termo(termo)
+    return None
+
+
 def tentar_responder_catalogo_estruturado(pergunta):
     pergunta_lower = pergunta.lower()
 
-    if "autores" in pergunta_lower and (
-        "mais" in pergunta_lower or "frequentes" in pergunta_lower
-    ):
+    if "autores" in pergunta_lower and ("mais" in pergunta_lower or "frequentes" in pergunta_lower):
         return autores_mais_frequentes()
 
     if "por ano" in pergunta_lower or "quantas publicações" in pergunta_lower:
         return contar_publicacoes_por_ano()
 
-    for ano in ["2019", "2020", "2021", "2022", "2023", "2024", "2025"]:
-        if ano in pergunta_lower and "public" in pergunta_lower:
-            return listar_publicacoes_por_ano(ano)
+    resultado_ano = _buscar_por_ano_catalogo(pergunta_lower)
+    if resultado_ano:
+        return resultado_ano
 
     if "journal" in pergunta_lower:
         return listar_publicacoes_por_tipo("journal")
@@ -587,47 +650,25 @@ def tentar_responder_catalogo_estruturado(pergunta):
     if "conference" in pergunta_lower or "conferência" in pergunta_lower:
         return listar_publicacoes_por_tipo("conference")
 
-    if "relacionadas a" in pergunta_lower:
-        termo = pergunta_lower.split("relacionadas a", 1)[1].replace(".", "").strip()
-        return buscar_publicacoes_por_termo(termo)
-
-    if "relacionados a" in pergunta_lower:
-        termo = pergunta_lower.split("relacionados a", 1)[1].replace(".", "").strip()
-        return buscar_publicacoes_por_termo(termo)
+    resultado_relacao = _buscar_por_relacao_catalogo(pergunta_lower)
+    if resultado_relacao:
+        return resultado_relacao
 
     if "sobre" in pergunta_lower and "public" in pergunta_lower:
         termo = pergunta_lower.split("sobre", 1)[1].replace(".", "").strip()
         return buscar_publicacoes_por_termo(termo)
 
-    if "domínios" in pergunta_lower or "dominios" in pergunta_lower:
+    if contem_alguma(pergunta_lower, ["domínios", "dominios", "áreas de aplicação", "areas de aplicacao"]):
         return listar_dominios_e_areas()
 
-    if "áreas de aplicação" in pergunta_lower or "areas de aplicacao" in pergunta_lower:
-        return listar_dominios_e_areas()
-
-    if re.search(r"\bexiste\b", pergunta_lower) and "extensão" in pergunta_lower and "para" in pergunta_lower:
-        termo = pergunta_lower.split("para", 1)[1].replace("?", "").replace(".", "").strip()
-        return buscar_publicacoes_por_termo(termo)
-
-    if re.search(r"\bexiste\b", pergunta_lower) and "extensao" in pergunta_lower and "para" in pergunta_lower:
-        termo = pergunta_lower.split("para", 1)[1].replace("?", "").replace(".", "").strip()
-        return buscar_publicacoes_por_termo(termo)
-
-    return None
+    return _buscar_extensao_catalogo(pergunta_lower)
 
 
 # ---------------------------------------------------------------------------
 # Teste de recuperação RAG
 # ---------------------------------------------------------------------------
 
-def testar_perguntas_rag(modo_verbose=False):
-    caminho = ROOT_DIR / "docs" / "rag_test_questions.md"
-    if not caminho.exists():
-        print("Arquivo rag_test_questions.md não encontrado.")
-        return
-
-    conteudo = caminho.read_text(encoding="utf-8")
-
+def _parsear_pares_de_teste(conteudo):
     pares = []
     for linha in conteudo.splitlines():
         linha = linha.strip()
@@ -638,45 +679,48 @@ def testar_perguntas_rag(modo_verbose=False):
             pergunta, esperado = partes[0], partes[1]
             if pergunta and esperado:
                 pares.append((pergunta, esperado))
+    return pares
+
+
+def _avaliar_par_de_teste(pergunta, esperado, modo_verbose):
+    documentos_alvo = identificar_documentos_alvo(pergunta)
+    pergunta_expandida = _expandir_pergunta(pergunta, documentos_alvo)
+    prompt = criar_prompt(pergunta_expandida, "conhecimento", documentos_alvo)
+    resposta = _executar_query(prompt, documentos_alvo, knowledge_engine)
+
+    fontes = [
+        node.metadata.get("file_name", "")
+        for node in resposta.source_nodes
+        if node.metadata.get("file_name")
+    ]
+
+    encontrado = any(esperado in f or f.endswith(esperado) for f in fontes)
+    status = "OK   " if encontrado else "FALHA"
+
+    print(f"[{status}] {pergunta[:60]}")
+    print(f"         Esperado:    {esperado}")
+    print(f"         Recuperados: {', '.join(fontes[:5]) or 'nenhum'}")
+    if modo_verbose and documentos_alvo:
+        print(f"         Alvo RAG:    {', '.join(documentos_alvo)}")
+    print()
+
+    return encontrado
+
+
+def testar_perguntas_rag(modo_verbose=False):
+    caminho = ROOT_DIR / "docs" / "rag_test_questions.md"
+    if not caminho.exists():
+        print("Arquivo rag_test_questions.md não encontrado.")
+        return
+
+    pares = _parsear_pares_de_teste(caminho.read_text(encoding="utf-8"))
 
     print(f"\n{'='*80}")
     print(f"RELATÓRIO DE TESTE RAG — {len(pares)} perguntas")
     print(f"{'='*80}\n")
 
-    ok = 0
-    falha = 0
-
-    for pergunta, esperado in pares:
-        documentos_alvo = identificar_documentos_alvo(pergunta)
-        pergunta_expandida = _expandir_pergunta(pergunta, documentos_alvo)
-        prompt = criar_prompt(pergunta_expandida, "conhecimento", documentos_alvo)
-
-        resposta = _executar_query(prompt, documentos_alvo, knowledge_engine)
-
-        fontes = [
-            node.metadata.get("file_name", "")
-            for node in resposta.source_nodes
-            if node.metadata.get("file_name")
-        ]
-
-        encontrado = any(
-            esperado in f or f.endswith(esperado)
-            for f in fontes
-        )
-
-        if encontrado:
-            ok += 1
-            status = "OK   "
-        else:
-            falha += 1
-            status = "FALHA"
-
-        print(f"[{status}] {pergunta[:60]}")
-        print(f"         Esperado:    {esperado}")
-        print(f"         Recuperados: {', '.join(fontes[:5]) or 'nenhum'}")
-        if modo_verbose and documentos_alvo:
-            print(f"         Alvo RAG:    {', '.join(documentos_alvo)}")
-        print()
+    ok = sum(1 for p, e in pares if _avaliar_par_de_teste(p, e, modo_verbose))
+    falha = len(pares) - ok
 
     print(f"{'='*80}")
     print(f"Resultado: {ok} OK / {falha} FALHA de {len(pares)} perguntas")
@@ -684,6 +728,8 @@ def testar_perguntas_rag(modo_verbose=False):
         print(f"Taxa de acerto: {ok / len(pares) * 100:.1f}%")
     print(f"{'='*80}\n")
 
+
+LABEL_RESPOSTA = "\nResposta:"
 
 # ---------------------------------------------------------------------------
 # Loop principal
@@ -712,19 +758,19 @@ while True:
     if not documentos_alvo:
         resposta_estruturada = tentar_responder_catalogo_estruturado(pergunta)
         if resposta_estruturada:
-            print("\nResposta:")
+            print(LABEL_RESPOSTA)
             print(resposta_estruturada)
             print("\nFonte: consulta estruturada com pandas nos CSVs do catálogo\n")
             continue
 
     resposta_fluxo = tentar_responder_fluxo_guiado(pergunta)
     if resposta_fluxo:
-        print("\nResposta:")
+        print(LABEL_RESPOSTA)
         print(resposta_fluxo)
         print("\nFonte: fluxo guiado de criação de extensão BPMN\n")
         continue
 
-    engine, tipo_base = escolher_engine(pergunta)
+    engine, tipo_base = escolher_engine(pergunta, documentos_alvo)
 
     print(f"\nBase escolhida: {tipo_base}")
     if documentos_alvo:
@@ -738,7 +784,7 @@ while True:
     else:
         resposta = engine.query(prompt)
 
-    print("\nResposta:")
+    print(LABEL_RESPOSTA)
     print(resposta.response)
 
     print("\nFontes recuperadas:")

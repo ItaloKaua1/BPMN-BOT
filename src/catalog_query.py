@@ -5,6 +5,9 @@ import pandas as pd
 ROOT_DIR = Path(__file__).resolve().parents[1]
 DATASETS_DIR = ROOT_DIR / "datasets"
 
+_SEM_TITULO = "sem título"
+_SEM_AUTORES = "autores não informados"
+
 
 def carregar_csv(nome):
     caminho = DATASETS_DIR / f"{nome}.csv"
@@ -29,8 +32,8 @@ def listar_publicacoes_por_ano(ano):
     linhas = []
 
     for _, row in resultado.iterrows():
-        titulo = row.get("title", "sem título")
-        autores = row.get("authors", "autores não informados")
+        titulo = row.get("title", _SEM_TITULO)
+        autores = row.get("authors", _SEM_AUTORES)
         tipo = row.get("type", "tipo não informado")
 
         linhas.append(f"- {titulo} | {autores} | {tipo}")
@@ -79,7 +82,7 @@ def autores_mais_frequentes(top_n=10):
 
     contagem = pd.Series(autores).value_counts().head(top_n)
 
-    linhas = [f"Autores mais frequentes no catálogo:"]
+    linhas = ["Autores mais frequentes no catálogo:"]
 
     for autor, total in contagem.items():
         linhas.append(f"- {autor}: {total}")
@@ -107,9 +110,9 @@ def listar_publicacoes_por_tipo(tipo_busca):
     linhas = [f"Publicações do tipo {tipo_busca}:"]
 
     for _, row in resultado.iterrows():
-        titulo = row.get("title", "sem título")
+        titulo = row.get("title", _SEM_TITULO)
         ano = row.get("year", "ano não informado")
-        autores = row.get("authors", "autores não informados")
+        autores = row.get("authors", _SEM_AUTORES)
 
         linhas.append(f"- {titulo} ({ano}) | {autores}")
 
@@ -143,9 +146,9 @@ def buscar_publicacoes_por_termo(termo):
     linhas = [f"Publicações relacionadas a '{termo}':"]
 
     for _, row in resultado.iterrows():
-        titulo = row.get("title", "sem título")
+        titulo = row.get("title", _SEM_TITULO)
         ano = row.get("year", "ano não informado")
-        autores = row.get("authors", "autores não informados")
+        autores = row.get("authors", _SEM_AUTORES)
         tipo = row.get("type", "tipo não informado")
 
         linhas.append(f"- {titulo} ({ano}) | {autores} | {tipo}")
