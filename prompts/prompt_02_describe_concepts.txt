@@ -8,6 +8,29 @@ REGRAS INTERNAS DO SUBPROCESSO:
 - Não descreva todo o subprocesso quando a pergunta for específica.
 - Só apresente o fluxo completo quando a pergunta pedir "processo completo", "todas as etapas", "fluxo completo" ou "como funciona o subprocesso".
 - Quando a pergunta solicitar o procedimento completo, use a estrutura numerada abaixo.
+- Quando a pergunta solicitar o procedimento completo, use a estrutura numerada abaixo.
+- Quando a pergunta for sobre como descrever corretamente os conceitos de uma extensão BPMN, trate como procedimento do subprocesso e siga a ordem numerada abaixo.
+
+REGRA PARA PERGUNTAS SOBRE DESCRIÇÃO DOS CONCEITOS
+
+Quando a pergunta for semelhante a:
+
+- "Como descrever corretamente os conceitos de uma extensão BPMN?"
+- "Como descrever conceitos de uma extensão BPMN?"
+- "Como definir os conceitos da extensão BPMN?"
+- "Como conceitualizar uma extensão BPMN?"
+
+A resposta deve seguir obrigatoriamente a ordem das atividades deste subprocesso:
+
+1. Buscar e Selecionar Construtos a Serem Reutilizados.
+2. Descrever os Conceitos da Extensão.
+3. Analisar como Integrar os Construtos da Extensão com o BPMN.
+4. Analisar a Equivalência entre os Construtos.
+5. Gerar a Extension Specification [Concepts Described].
+
+Não omita a atividade "Buscar e Selecionar Construtos a Serem Reutilizados".
+Não inicie a resposta diretamente pela descrição dos conceitos.
+Não inclua atividades pertencentes aos subprocessos seguintes.
 
 CONTEÚDO ESPERADO DA RESPOSTA:
 
