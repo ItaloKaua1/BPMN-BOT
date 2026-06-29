@@ -3,12 +3,52 @@ A pergunta refere-se ao subprocesso 4.3 - Consult Experts.
 REGRAS INTERNAS DO SUBPROCESSO:
 
 - Responda apenas com base nas atividades deste subprocesso.
-- Não descreva etapas de desenvolvimento do metamodelo, sintaxe concreta ou regras de validação, uso prático para modelagem, avaliação formal, publicação, catálogo ou endosso.
-- Se a pergunta tratar de uma etapa, tipo de especialista, artefato ou decisão específica, responda apenas sobre esse item.
-- Não descreva todo o subprocesso quando a pergunta for específica.
-- Só apresente o fluxo completo quando a pergunta pedir "processo completo", "todas as etapas", "fluxo completo" ou "como funciona o subprocesso".
-- Quando a pergunta solicitar o procedimento completo, use a estrutura numerada abaixo.
+- Não descreva etapas de desenvolvimento do metamodelo, sintaxe concreta, uso prático, avaliação formal, publicação, catálogo ou endosso.
+- Perguntas sobre "como consultar especialistas" devem ser tratadas como perguntas sobre o procedimento geral do subprocesso, não como perguntas sobre a primeira atividade.
+- Só responda sobre uma etapa isolada quando o usuário perguntar explicitamente por um item específico, como:
+  - "O que enviar aos especialistas?"
+  - "Quem deve ser consultado?"
+  - "Como registrar o feedback?"
+  - "Quando consultar especialistas de domínio?"
 
+INTERPRETAÇÃO DA INTENÇÃO DA PERGUNTA
+
+Considere que perguntas iniciadas por:
+
+- Como consultar especialistas...
+- Como realizar a consulta aos especialistas...
+- Como obter feedback de especialistas...
+- Como funciona a consulta aos especialistas...
+
+referem-se ao procedimento principal do subprocesso.
+
+Nesses casos, apresente o fluxo completo da consulta aos especialistas, incluindo:
+
+1. identificação dos especialistas;
+2. envio dos materiais necessários;
+3. análise realizada pelos especialistas;
+4. registro do feedback recebido;
+5. utilização das recomendações para melhoria da extensão.
+
+Não responda apenas a primeira atividade do subprocesso.
+
+IMPORTANTE SOBRE A PERGUNTA "COMO CONSULTAR ESPECIALISTAS"
+
+A pergunta "Como consultar especialistas em extensões BPMN?" NÃO deve ser interpretada como uma pergunta apenas sobre a atividade 1.
+
+Essa pergunta representa o procedimento geral de consulta aos especialistas dentro do subprocesso 4.3.
+
+Portanto, quando a pergunta for exatamente ou semanticamente semelhante a "Como consultar especialistas em extensões BPMN?", a resposta deve obrigatoriamente cobrir:
+
+1. identificação dos especialistas;
+2. envio dos materiais;
+3. consulta a especialistas BPMN;
+4. consulta a especialistas de domínio, quando aplicável;
+5. análise feita pelos especialistas;
+6. registro do feedback recebido;
+7. uso das recomendações para identificar correções e melhorias.
+
+Não responda apenas "O Extender deve identificar especialistas...".
 CONTEÚDO ESPERADO DA RESPOSTA:
 
 1. Consultar Especialistas em Extensões BPMN

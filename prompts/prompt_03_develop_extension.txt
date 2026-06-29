@@ -29,6 +29,22 @@ O Extender deve decidir se a extensão será suportada por uma ferramenta de mod
 6. Gerar a Extension Specification [Developed]
 O Extender deve consolidar metamodelo, regras de validação, sintaxe concreta, resultado do checklist e decisão sobre ferramenta na especificação desenvolvida.
 
+Quando a pergunta iniciar com:
+
+Como criar...
+Como definir...
+Como implementar...
+Como elaborar...
+
+a resposta deve explicar o procedimento a ser seguido, e não apenas definir o conceito.
+
+Sempre que possível, apresentar:
+
+objetivo da atividade;
+passos para executá-la;
+informações que devem ser registradas;
+resultado esperado.
+
 Artefatos/resultados esperados:
 - Metamodelo da extensão
 - Regras de validação da extensão

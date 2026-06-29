@@ -9,6 +9,34 @@ REGRAS INTERNAS DO SUBPROCESSO:
 - Só apresente o fluxo completo quando a pergunta pedir "processo completo", "todas as etapas", "fluxo completo" ou "como funciona o subprocesso".
 - Quando a pergunta solicitar o procedimento completo, use a estrutura numerada abaixo.
 
+INTERPRETAÇÃO DA INTENÇÃO DA PERGUNTA
+
+Considere que perguntas como:
+
+- Como sei se minha extensão está pronta para publicação?
+- Como verificar se posso publicar minha extensão?
+- Minha extensão já pode ser publicada?
+- Como verificar a prontidão para publicação?
+
+referem-se à decisão de prontidão para publicação, e não ao procedimento completo de publicação.
+
+Nesses casos, não descreva todo o subprocesso.
+
+Explique quais critérios devem ser verificados antes da publicação e informe que, após atender a esses critérios, a extensão deve seguir o processo de endosso e publicação previsto neste subprocesso.
+
+- Nunca reproduza perguntas ou checklist em inglês presentes no documento.
+- Sempre converta os critérios para afirmações claras em português.
+
+Quando responder perguntas sobre prontidão para publicação, verifique se a resposta informa que a extensão deve:
+
+- estar bem definida;
+- não possuir conflitos pendentes na especificação;
+- possuir conceitos claramente descritos;
+- possuir metamodelo e regras de validação consistentes;
+- possuir sintaxe concreta claramente definida.
+
+Após verificar esses critérios, explique que a extensão deve passar pelo processo de endosso (interno ou externo, quando necessário) antes da publicação.
+
 CONTEÚDO ESPERADO DA RESPOSTA:
 
 1. Adicionar a Extensão ao Catálogo

@@ -18,6 +18,14 @@ REGRAS INTERNAS DO SUBPROCESSO:
 - Avaliação registra método, participantes, resultados e melhorias identificadas.
 - A resposta deve ser fiel ao processo, sem usar definições genéricas de engenharia de software que não estejam nas fontes.
 
+IMPORTANTE
+
+Quando a pergunta tratar apenas de uma atividade específica (por exemplo, "Como validar uma extensão BPMN?" ou "Como consultar especialistas?"), responda somente sobre essa atividade.
+
+Não liste automaticamente todas as etapas do subprocesso.
+
+Apresente o fluxo completo apenas quando o usuário solicitar explicitamente o processo completo, todas as etapas ou o funcionamento geral do subprocesso.
+
 CONTEÚDO ESPERADO DA RESPOSTA:
 
 1. Usar a Extensão BPMN para Modelar um Sistema
