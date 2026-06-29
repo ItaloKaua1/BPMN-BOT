@@ -1,5 +1,6 @@
 import re
 import textwrap
+import unicodedata
 from pathlib import Path
 
 from llama_index.core import (
@@ -39,6 +40,12 @@ Settings.embed_model = HuggingFaceEmbedding(
 # Mapa de roteamento: keywords -> documento processual esperado
 # ---------------------------------------------------------------------------
 _DOC_01 = "01_analyse_need_for_extension.md"
+_DOC_02 = "02_describe_extension_concepts.md"
+_DOC_03 = "03_develop_bpmn_extension.md"
+_DOC_04 = "04_support_extension_with_tool.md"
+_DOC_05 = "05_validate_and_evaluate_extension.md"
+_DOC_06 = "06_consult_experts.md"
+_DOC_07 = "07_publicise_bpmn_extension.md"
 
 MAPA_DOCUMENTOS = {
     _DOC_01: [
@@ -81,7 +88,7 @@ MAPA_DOCUMENTOS = {
         "quando uma extensão bpmn não é necessária",
         "quando uma extensao bpmn nao e necessaria",
     ],
-    "02_describe_extension_concepts.md": [
+    _DOC_02: [
         "conceitos minha extensão deve introduzir",
         "quais conceitos minha extensão",
         "definir um conceito da extensão", "definir conceito da extensão",
@@ -89,8 +96,24 @@ MAPA_DOCUMENTOS = {
         "integrar novos conceitos à bpmn", "relacionar conceitos da extensão",
         "equivalências entre conceitos", "especializado ou criado do zero",
         "identificar equivalências",
+        "como descrever corretamente os conceitos",
+        "descrever corretamente os conceitos",
+        "descrever conceitos de uma extensão bpmn",
+        "descrever conceitos de uma extensao bpmn",
+        "como descrever conceitos da extensão",
+        "como descrever conceitos da extensao",
+        "describe concepts",
+        "describe extension concepts",
+        "conceitos de uma extensão bpmn",
+        "conceitos de uma extensao bpmn",
+        "conceitos da extensão bpmn",
+        "conceitos da extensao bpmn",
+        "conceitualizar extensão bpmn",
+        "conceitualizar extensao bpmn",
+        "extension specification concepts described",
+        "extension specification [concepts described]",
     ],
-    "03_develop_bpmn_extension.md": [
+    _DOC_03: [
         "definir o metamodelo", "definir metamodelo de uma extensão",
         "criar regras de validação", "regras de validacao para uma extensão",
         "definir a sintaxe concreta", "sintaxe concreta da extensão",
@@ -104,7 +127,7 @@ MAPA_DOCUMENTOS = {
         "relacionar o metamodelo com bpmn",
         "representação xml",
     ],
-    "04_support_extension_with_tool.md": [
+    _DOC_04: [
         "ferramenta de modelagem para apoiar",
         "criar uma ferramenta de modelagem",
         "preciso desenvolver uma ferramenta nova",
@@ -133,7 +156,7 @@ MAPA_DOCUMENTOS = {
         "aplicar a extensão apenas lendo a especificação",
         "aplicar a extensao apenas lendo a especificacao",
     ],
-    "05_validate_and_evaluate_extension.md": [
+    _DOC_05: [
         "como validar uma extensão bpmn",
         "como avaliar uma extensão bpmn",
         "aplicar uma extensão bpmn em um caso real",
@@ -161,7 +184,7 @@ MAPA_DOCUMENTOS = {
         "validação e avaliação",
         "validacao e avaliacao",
     ],
-    "06_consult_experts.md": [
+    _DOC_06: [
         "consultar especialistas em extensões bpmn",
         "consultar especialista bpmn",
         "quando devo consultar especialistas bpmn",
@@ -186,7 +209,7 @@ MAPA_DOCUMENTOS = {
         "recomendações dos especialistas",
         "recomendacoes dos especialistas",
     ],
-    "07_publicise_bpmn_extension.md": [
+    _DOC_07: [
         "como publicar uma extensão bpmn",
         "registrar uma extensão bpmn no catálogo",
         "quais informações devem ser incluídas no catálogo",
@@ -397,13 +420,13 @@ print("Documentos por nome:")
 for nome in sorted(DOCUMENTOS_POR_NOME):
     print("-", nome)
 
-print(f"Documentos do catalogo: {len(catalog_documents)}")
+print(f"Documentos do catálogo: {len(catalog_documents)}")
 print(f"Documentos do conhecimento: {len(knowledge_documents)}")
 
-print("Criando indice do catalogo...")
+print("Criando índice do catálogo...")
 catalog_index = VectorStoreIndex.from_documents(catalog_documents)
 
-print("Criando indice do conhecimento...")
+print("Criando índice do conhecimento...")
 knowledge_index = VectorStoreIndex.from_documents(knowledge_documents)
 
 catalog_engine = catalog_index.as_query_engine(similarity_top_k=4)
@@ -421,53 +444,172 @@ estado_conversa = {
 # Roteamento
 # ---------------------------------------------------------------------------
 
-# Perguntas que casem com qualquer entrada aqui retornam EXCLUSIVAMENTE o
-# documento listado, sem misturar outros subprocessos.
-DOCUMENTOS_PRIORITARIOS = {
-    _DOC_01: [
-        "preciso criar uma extensão bpmn",
-        "preciso criar uma extensao bpmn",
-        "realmente preciso criar uma extensão bpmn",
-        "realmente preciso criar uma extensao bpmn",
-        "como identificar se preciso criar",
-        "como saber se preciso criar",
-        "como decidir se devo criar uma extensão bpmn",
-        "como decidir se devo criar uma extensao bpmn",
-        "devo estender o bpmn",
-        "bpmn padrão é suficiente",
-        "bpmn padrao e suficiente",
-        "minha necessidade já é atendida pelo bpmn",
-        "minha necessidade ja e atendida pelo bpmn",
-        "existe necessidade de criar uma extensão",
-        "existe necessidade de criar uma extensao",
-        "como avaliar a necessidade de uma extensão bpmn",
-        "como avaliar a necessidade de uma extensao bpmn",
-        "como identificar a necessidade de uma extensão bpmn",
-        "como identificar a necessidade de uma extensao bpmn",
-        "quando devo criar uma extensão bpmn",
-        "quando devo criar uma extensao bpmn",
-        "quando uma extensão bpmn não é necessária",
-        "quando uma extensao bpmn nao e necessaria",
-        "extensão bpmn não é necessária",
-        "extensao bpmn nao e necessaria",
-    ],
-}
+def normalizar_texto(texto):
+    texto = texto.lower()
+    texto = unicodedata.normalize("NFD", texto)
+    texto = "".join(c for c in texto if unicodedata.category(c) != "Mn")
+    return texto
+
+
+def contem_termo(p, termos):
+    return any(t in p for t in termos)
+
+
+def rotear_subprocesso(pergunta):
+    p = normalizar_texto(pergunta)
+
+    # 03 vem antes do 02: perguntas sobre metamodelo/sintaxe podem conter
+    # "conceitos", mas pertencem ao desenvolvimento, não à descrição.
+    if contem_termo(p, [
+        "metamodelo",
+        "sintaxe concreta",
+        "xml",
+        "esquema xml",
+        "cardinalidade",
+        "cardinalidades",
+        "atributo",
+        "atributos",
+        "relacionamento",
+        "relacionamentos",
+        "restricao",
+        "restricoes",
+        "regra de validacao",
+        "regras de validacao",
+        "completude",
+        "consistencia",
+        "conflito",
+        "conflitos",
+        "checklist de verificacao",
+    ]):
+        return [_DOC_03]
+
+    if contem_termo(p, [
+        "descrever conceito",
+        "descrever conceitos",
+        "descrever corretamente os conceitos",
+        "conceitos de uma extensao",
+        "conceitos da extensao",
+        "conceitos introduzidos",
+        "conceito introduzido",
+        "construtos reutilizados",
+        "construto reutilizado",
+        "reutilizar construtos",
+        "integrar construtos",
+        "integrar conceitos",
+        "relacionar conceitos",
+        "relacao entre conceitos",
+        "relacao entre construtos",
+        "equivalencia",
+        "equivalente",
+        "conceitualizar",
+        "concepts described",
+        "describe concepts",
+        "describe extension concepts",
+    ]):
+        return [_DOC_02]
+
+    if contem_termo(p, [
+        "necessidade",
+        "preciso criar",
+        "devo criar",
+        "quando criar",
+        "quando devo criar",
+        "bpmn padrao",
+        "bpmn e adequado",
+        "adequado para meu dominio",
+        "atende meu dominio",
+        "limitacao da bpmn",
+        "limitacoes da bpmn",
+        "conformity checklist",
+        "catalogo de extensoes",
+        "extensao relacionada",
+        "extensoes relacionadas",
+        "bpmn nao e suficiente",
+        "bpmn e suficiente",
+    ]):
+        return [_DOC_01]
+
+    if contem_termo(p, [
+        "ferramenta",
+        "ferramental",
+        "suporte ferramental",
+        "tool",
+        "modelling tool",
+        "bpmn.io",
+        "camunda",
+        "bizagi",
+        "meta4model",
+        "extension available",
+        "extension applied",
+        "adaptar ferramenta",
+        "criar ferramenta",
+        "implementar ferramenta",
+    ]):
+        return [_DOC_04]
+
+    if contem_termo(p, [
+        "validar",
+        "validacao",
+        "avaliar",
+        "avaliacao",
+        "experimento",
+        "estudo de caso",
+        "survey",
+        "uso pratico",
+        "modelar um sistema",
+        "aplicar a extensao",
+        "resultados da avaliacao",
+        "validated",
+        "evaluated",
+    ]):
+        return [_DOC_05]
+
+    if contem_termo(p, [
+        "especialista",
+        "especialistas",
+        "consultar especialistas",
+        "feedback",
+        "recomendacao",
+        "recomendacoes",
+        "revisao por especialistas",
+        "especialistas bpmn",
+        "especialistas do dominio",
+    ]):
+        return [_DOC_06]
+
+    if contem_termo(p, [
+        "publicar",
+        "publicacao",
+        "publicise",
+        "catalogo",
+        "entrada no catalogo",
+        "endorsement",
+        "endosso",
+        "endossar",
+        "notificar especialistas externos",
+        "pacote de publicacao",
+        "disponibilizar para a comunidade",
+    ]):
+        return [_DOC_07]
+
+    return []
 
 
 def identificar_documentos_alvo(pergunta):
-    pergunta_lower = pergunta.lower()
+    documentos = rotear_subprocesso(pergunta)
+    if documentos:
+        return documentos
 
-    for nome_doc, palavras_chave in DOCUMENTOS_PRIORITARIOS.items():
-        for kw in palavras_chave:
-            if kw in pergunta_lower:
-                return [nome_doc]
+    # fallback: usa MAPA_DOCUMENTOS se o roteador não identificar
+    pergunta_normalizada = normalizar_texto(pergunta)
 
     alvos = []
     for nome_doc, palavras_chave in MAPA_DOCUMENTOS.items():
         for kw in palavras_chave:
-            if kw in pergunta_lower:
+            if normalizar_texto(kw) in pergunta_normalizada:
                 alvos.append(nome_doc)
                 break
+
     return alvos
 
 
@@ -494,7 +636,7 @@ def _executar_query(prompt, documentos_alvo, engine_padrao):
     docs_alvo = buscar_documentos_por_nome(documentos_alvo)
     if docs_alvo:
         engine_alvo = VectorStoreIndex.from_documents(docs_alvo).as_query_engine(
-            similarity_top_k=6
+            similarity_top_k=3
         )
         return engine_alvo.query(prompt)
     return engine_padrao.query(prompt)
@@ -532,12 +674,12 @@ def escolher_engine(pergunta, documentos_alvo=None):
 
 PROMPTS_ESPECIALIZADOS = {
     _DOC_01: "prompt_01_analyse_need.txt",
-    "02_describe_extension_concepts.md": "prompt_02_describe_concepts.txt",
-    "03_develop_bpmn_extension.md": "prompt_03_develop_extension.txt",
-    "04_support_extension_with_tool.md": "prompt_04_support_tool.txt",
-    "05_validate_and_evaluate_extension.md": "prompt_05_validate_evaluate.txt",
-    "06_consult_experts.md": "prompt_06_consult_experts.txt",
-    "07_publicise_bpmn_extension.md": "prompt_07_publicise_extension.txt",
+    _DOC_02: "prompt_02_describe_concepts.txt",
+    _DOC_03: "prompt_03_develop_extension.txt",
+    _DOC_04: "prompt_04_support_tool.txt",
+    _DOC_05: "prompt_05_validate_evaluate.txt",
+    _DOC_06: "prompt_06_consult_experts.txt",
+    _DOC_07: "prompt_07_publicise_extension.txt",
 }
 
 
@@ -597,14 +739,40 @@ def extrair_dominio(pergunta):
     return pergunta.strip().rstrip(".,?")
 
 
+_PREFIXOS_CONSULTA = (
+    "como ",
+    "o que ",
+    "o que é",
+    "qual ",
+    "quais ",
+    "quando ",
+    "por que ",
+    "porque ",
+    "explique ",
+    "explica ",
+    "descreva ",
+    "descreve ",
+    "defina ",
+    "define ",
+    "me explique ",
+    "pode explicar ",
+)
+
+
+def _eh_pergunta_consulta(pergunta):
+    p = normalizar_texto(pergunta).strip()
+    return p.startswith(_PREFIXOS_CONSULTA)
+
+
 def _detectar_intencao_criar(pergunta_lower):
+    p = normalizar_texto(pergunta_lower)
     return (
-        ("como criar" in pergunta_lower and "extensão bpmn" in pergunta_lower)
-        or ("como criar" in pergunta_lower and "extensao bpmn" in pergunta_lower)
-        or ("quero criar" in pergunta_lower and "extensão bpmn" in pergunta_lower)
-        or ("quero criar" in pergunta_lower and "extensao bpmn" in pergunta_lower)
-        or "criar extensão bpmn" in pergunta_lower
-        or "criar extensao bpmn" in pergunta_lower
+        ("quero criar" in p and ("extensao bpmn" in p or "uma extensao" in p))
+        or ("vamos criar" in p and ("extensao bpmn" in p or "uma extensao" in p))
+        or ("me ajude a desenvolver" in p and ("extensao" in p or "extensão" in p))
+        or "iniciar desenvolvimento de extensao" in p
+        or "quero comecar uma nova extensao" in p
+        or "quero comecar uma extensao" in p
     )
 
 
@@ -612,9 +780,11 @@ def tentar_responder_fluxo_guiado(pergunta):
     global estado_conversa
     pergunta_lower = pergunta.lower()
 
-    intencao_criar = _detectar_intencao_criar(pergunta_lower)
-
-    if intencao_criar:
+    if estado_conversa["fluxo_ativo"] is None:
+        if _eh_pergunta_consulta(pergunta):
+            return None
+        if not _detectar_intencao_criar(pergunta_lower):
+            return None
         estado_conversa["fluxo_ativo"] = "criacao_extensao"
         estado_conversa["etapa_atual"] = "informar_dominio"
         estado_conversa["dominio"] = None
@@ -798,6 +968,36 @@ def testar_perguntas_rag(modo_verbose=False):
 
 LABEL_RESPOSTA = "\nResposta:"
 
+def limpar_resposta(texto):
+    texto = str(texto)
+
+    substituicoes = {
+        "documento esperado": "subprocesso correspondente",
+        "Documento esperado": "Subprocesso correspondente",
+
+        "restreções": "restrições",
+        "Restreções": "Restrições",
+
+        "na metamodelo": "no metamodelo",
+        "da metamodelo": "do metamodelo",
+        "das metamodelo": "dos metamodelos",
+
+        "Explica o relacionamento": "Explique o relacionamento",
+        "Prove referências": "Forneça referências",
+        "Prove evidências": "Forneça evidências",
+
+        "avaliados pelo equivalência": "avaliados quanto à equivalência",
+        "avaliado pelo equivalência": "avaliado quanto à equivalência",
+
+        "análise analítica": "análise realizada",
+        "conforme a orientação fornecida": "conforme o subprocesso correspondente",
+    }
+
+    for errado, certo in substituicoes.items():
+        texto = texto.replace(errado, certo)
+
+    return texto
+
 # ---------------------------------------------------------------------------
 def imprimir_formatado(texto, largura=100):
     for bloco in str(texto).splitlines():
@@ -838,16 +1038,18 @@ while True:
         resposta_estruturada = tentar_responder_catalogo_estruturado(pergunta)
         if resposta_estruturada:
             print(LABEL_RESPOSTA)
+            resposta_limpa = limpar_resposta(resposta.response)
             imprimir_formatado(resposta_estruturada)
             print("\nFonte: consulta estruturada com pandas nos CSVs do catálogo\n")
             continue
 
-    resposta_fluxo = tentar_responder_fluxo_guiado(pergunta)
-    if resposta_fluxo:
-        print(LABEL_RESPOSTA)
-        imprimir_formatado(resposta_fluxo)
-        print("\nFonte: fluxo guiado de criação de extensão BPMN\n")
-        continue
+    if not documentos_alvo:
+        resposta_fluxo = tentar_responder_fluxo_guiado(pergunta)
+        if resposta_fluxo:
+            print(LABEL_RESPOSTA)
+            imprimir_formatado(resposta_fluxo)
+            print("\nFonte: fluxo guiado de criação de extensão BPMN\n")
+            continue
 
     engine, tipo_base = escolher_engine(pergunta, documentos_alvo)
 
@@ -860,7 +1062,8 @@ while True:
         resposta = engine.query(prompt)
 
     print(LABEL_RESPOSTA)
-    imprimir_formatado(resposta.response)
+    resposta_limpa = limpar_resposta(resposta.response)
+    imprimir_formatado(resposta_limpa)
 
     fontes = []
     for node in resposta.source_nodes:
