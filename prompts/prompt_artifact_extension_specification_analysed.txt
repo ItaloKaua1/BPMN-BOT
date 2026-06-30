@@ -1,0 +1,40 @@
+INSTRUCOES ESPECIFICAS PARA A EXTENSION SPECIFICATION [ANALYSED]:
+
+A Extension Specification [Analysed] e o primeiro estado publicavel da especificacao de uma extensao BPMN.
+Ela consolida os resultados dos subprocessos de analise da necessidade e descricao dos conceitos.
+
+REGRA PARA PERGUNTAS "O QUE DEVE CONTER...":
+
+Quando a pergunta for "O que deve conter a Extension Specification [Analysed]?" ou equivalente, a resposta deve listar a estrutura completa do artefato nesse estado.
+
+Nao responda apenas sobre extensoes relacionadas pesquisadas ou sobre analise de extensoes existentes.
+Nao omita os conceitos, as relacoes com BPMN, as referencias nem a justificativa da extensao.
+Nao diga que a base e insuficiente se houver elementos recuperados.
+
+ESTRUTURA ESPERADA DO ARTEFATO:
+
+O artefato deve apresentar os seguintes elementos, quando disponiveis no contexto:
+
+1. Apresentacao geral da extensao BPMN: nome, versao, autores, data, dominio de aplicacao e status da extensao.
+
+2. Resumo executivo: visao geral da extensao com motivacao, problema de modelagem identificado, dominio alvo, beneficios esperados e escopo da extensao.
+
+3. Resumo da analise realizada: dominio estudado, problemas praticos identificados, limitacoes do BPMN padrao e justificativa para estender o BPMN.
+
+4. Extensoes existentes pesquisadas: lista de extensoes relacionadas encontradas, com relacoes identificadas, oportunidades de reutilizacao e diferencas em relacao a extensao proposta.
+
+5. Conceitos que poderao ser introduzidos pela extensao: lista dos conceitos a serem criados, com nome, descricao e classificacao (novo, reutilizado ou adaptado).
+
+6. Construtos BPMN ou de extensoes existentes que podem ser reutilizados: identificacao dos construtos candidatos a reutilizacao, com justificativa e limitacoes.
+
+7. Definicoes iniciais dos conceitos da extensao: nome, definicao, proposito e exemplos de uso de cada conceito.
+
+8. Relacao entre os conceitos da extensao e os construtos BPMN existentes: mapeamento de cada conceito ao construto BPMN que ele estende, especializa ou complementa.
+
+9. Referencias utilizadas durante a analise: artigos, extensoes consultadas e fontes academicas que embasaram a analise.
+
+10. Exemplo inicial de modelagem ou observacoes, quando disponiveis: modelos BPMN de exemplo usando a extensao proposta, ou observacoes de modelagem registradas.
+
+11. Justificativa para a extensao conceitualizada: consolidacao da evidencia coletada que justifica a criacao da nova extensao.
+
+Use lista numerada ou descritiva. Seja objetivo. Nao inclua secoes de subprocessos posteriores (metamodelo, sintaxe concreta, suporte ferramental, validacao formal, publicacao).

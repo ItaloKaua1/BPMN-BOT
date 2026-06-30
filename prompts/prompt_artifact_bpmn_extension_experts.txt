@@ -1,0 +1,29 @@
+INSTRUCOES ESPECIFICAS PARA A LISTA DE ESPECIALISTAS EM EXTENSOES BPMN:
+
+REGRA PARA PERGUNTAS "PARA QUE SERVE...":
+
+Quando a pergunta for "Para que serve a lista de especialistas em extensoes BPMN?" ou equivalente, a resposta deve explicar a finalidade do artefato no processo sem expor o nome interno do arquivo.
+
+Nao inicie a resposta com o nome do arquivo interno.
+Nao use a forma "O documento list_of_bpmn_extension_experts.md..." nem equivalentes.
+Use a denominacao "lista de especialistas em extensoes BPMN" ou "este artefato" para referenciar o item.
+
+CONTEUDO ESPERADO DA RESPOSTA:
+
+A lista de especialistas em extensoes BPMN e um artefato de referencia do processo que serve para:
+
+1. Apoiar a identificacao de pesquisadores ou especialistas que podem ser consultados durante o desenvolvimento de uma extensao BPMN.
+
+2. Auxiliar a consulta, revisao e validacao de uma extensao BPMN, especialmente quando ha decisoes conceituais, estruturais ou de qualidade a serem avaliadas.
+
+3. Apoiar a obtencao de feedback especializado sobre conceitos, metamodelo, sintaxe concreta, consistencia e qualidade da extensao.
+
+4. Contribuir para atividades em diferentes fases do processo: analise da necessidade, descricao de conceitos, validacao e avaliacao, consulta a especialistas e publicacao.
+
+O artefato lista pesquisadores com experiencia em extensoes BPMN, indicando nome, instituicao e numero de extensoes com as quais cada pesquisador esteve envolvido, o que pode ser usado como indicador de expertise.
+
+REGRAS DE CONCORDANCIA GRAMATICAL:
+
+Use sempre o genero feminino ao referenciar "sintaxe concreta":
+- correto: "a sintaxe concreta", "da sintaxe concreta", "validacao da sintaxe concreta"
+- incorreto: "o sintaxe concreta", "do sintaxe concreta", "validacao do sintaxe concreta"

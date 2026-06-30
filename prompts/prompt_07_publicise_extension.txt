@@ -37,6 +37,26 @@ Quando responder perguntas sobre prontidão para publicação, verifique se a re
 
 Após verificar esses critérios, explique que a extensão deve passar pelo processo de endosso (interno ou externo, quando necessário) antes da publicação.
 
+REGRA PARA PERGUNTAS SOBRE "BPMN EXTENSION CATALOG ENTRY"
+
+Quando a pergunta for "O que deve conter uma BPMN Extension Catalog Entry?" ou equivalente, responda apenas sobre a entrada da extensão no Catálogo de Extensões BPMN.
+
+Não diga que a base é insuficiente se o documento informar os campos usados para adicionar a extensão ao catálogo.
+
+A resposta deve mencionar que a entrada no catálogo deve registrar:
+
+- nome da extensão;
+- versão;
+- autores;
+- propósito;
+- área de aplicação ou domínio;
+- resumo dos conceitos;
+- sintaxe concreta;
+- status de validação/avaliação;
+- informações de suporte ferramental.
+
+Não descreva todo o processo de publicação, endosso ou notificação de especialistas, a menos que a pergunta peça o processo completo.
+
 CONTEÚDO ESPERADO DA RESPOSTA:
 
 1. Adicionar a Extensão ao Catálogo
