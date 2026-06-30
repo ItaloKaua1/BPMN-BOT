@@ -19,6 +19,8 @@ from preparedata import (
 from catalog_query import (
     autores_mais_frequentes,
     buscar_publicacoes_por_termo,
+    buscar_extensoes_catalogo_por_termo,
+    buscar_extensoes_por_dominio_ou_area,
     contar_publicacoes_por_ano,
     listar_publicacoes_por_ano,
     listar_publicacoes_por_tipo,
@@ -448,12 +450,144 @@ def normalizar_texto(texto):
     texto = texto.lower()
     texto = unicodedata.normalize("NFD", texto)
     texto = "".join(c for c in texto if unicodedata.category(c) != "Mn")
+    texto = re.sub(r"[^a-z0-9\s]", " ", texto)
+    texto = re.sub(r"\s+", " ", texto).strip()
     return texto
 
 
 def contem_termo(p, termos):
     return any(t in p for t in termos)
 
+
+def eh_consulta_catalogo(pergunta):
+    p = normalizar_texto(pergunta)
+
+    termos_catalogo = [
+        "catalogo",
+        "catalogo de extensoes",
+        "catalogo de extensoes bpmn",
+        "publicacao",
+        "publicacoes",
+        "artigo",
+        "artigos",
+        "autor",
+        "autores",
+        "por ano",
+        "tipo journal",
+        "journal",
+        "conference",
+        "conferencia",
+        "dominio",
+        "dominios",
+        "area de aplicacao",
+        "areas de aplicacao",
+        "extensoes existentes",
+        "extensao existente",
+        "extensoes relacionadas",
+        "extensao relacionada",
+        "relacionadas a",
+        "relacionados a",
+        "existem extensoes",
+        "liste extensoes",
+        "listar extensoes",
+        "publicacoes relacionadas",
+        "slr",
+    ]
+
+    return any(t in p for t in termos_catalogo)
+
+
+def rotear_artefato(pergunta):
+    p = normalizar_texto(pergunta)
+
+    if contem_termo(p, [
+        "extension specification analysed",
+        "extension specification analyzed",
+        "specification analysed",
+        "specification analyzed",
+        "especificacao analisada",
+        "especificação analisada",
+    ]):
+        return [
+            "artifact_extension_specification_analysed.md",
+            _DOC_01,
+            _DOC_02,
+        ]
+
+    if contem_termo(p, [
+        "extension specification concepts described",
+        "concepts described",
+        "conceitos descritos",
+        "especificacao concepts described",
+        "especificação concepts described",
+    ]):
+        return [
+            "artifact_extension_specification_concepts_described.md",
+            _DOC_02,
+        ]
+
+    if contem_termo(p, [
+        "extension specification developed",
+        "specification developed",
+        "especificacao developed",
+        "especificação developed",
+        "especificacao desenvolvida",
+        "especificação desenvolvida",
+    ]):
+        return [
+            "artifact_extension_specification_developed.md",
+            _DOC_03,
+        ]
+
+    if contem_termo(p, [
+        "extension specification validated evaluated",
+        "extension specification validated/evaluated",
+        "validated evaluated",
+        "validated/evaluated",
+        "especificacao validated evaluated",
+        "especificação validated evaluated",
+        "especificacao validada avaliada",
+        "especificação validada avaliada",
+    ]):
+        return [
+            "artifact_extension_specification_validated_evaluated.md",
+            _DOC_05,
+        ]
+
+    if contem_termo(p, [
+        "modelling tool for the extension",
+        "modeling tool for the extension",
+        "ferramenta de modelagem da extensao",
+        "ferramenta de modelagem da extensão",
+        "modelling tool",
+        "modeling tool",
+    ]):
+        return ["artifact_modelling_and_observations.md"]
+
+    if contem_termo(p, [
+        "list of bpmn extension experts",
+        "lista de especialistas em extensoes bpmn",
+        "lista de especialistas em extensões bpmn",
+        "especialistas em extensoes bpmn",
+        "especialistas em extensões bpmn",
+    ]):
+        return [
+            "list_of_bpmn_extension_experts.md",
+            _DOC_06,
+        ]
+
+    if contem_termo(p, [
+        "bpmn extension catalog entry",
+        "extension catalog entry",
+        "catalog entry",
+        "entrada no catalogo de extensoes bpmn",
+        "entrada no catalogo de extensao bpmn",
+        "entrada da extensao no catalogo",
+        "entrada da extensao no catalogo de extensoes bpmn",
+    ]):
+        return [_DOC_07]
+
+    return []
 
 def rotear_subprocesso(pergunta):
     p = normalizar_texto(pergunta)
@@ -594,13 +728,15 @@ def rotear_subprocesso(pergunta):
 
     return []
 
-
 def identificar_documentos_alvo(pergunta):
+    artefatos = rotear_artefato(pergunta)
+    if artefatos:
+        return artefatos
+
     documentos = rotear_subprocesso(pergunta)
     if documentos:
         return documentos
 
-    # fallback: usa MAPA_DOCUMENTOS se o roteador não identificar
     pergunta_normalizada = normalizar_texto(pergunta)
 
     alvos = []
@@ -635,8 +771,9 @@ def buscar_documentos_por_nome(nomes_alvo):
 def _executar_query(prompt, documentos_alvo, engine_padrao):
     docs_alvo = buscar_documentos_por_nome(documentos_alvo)
     if docs_alvo:
+        top_k = max(4, len(documentos_alvo) * 2)
         engine_alvo = VectorStoreIndex.from_documents(docs_alvo).as_query_engine(
-            similarity_top_k=3
+            similarity_top_k=top_k
         )
         return engine_alvo.query(prompt)
     return engine_padrao.query(prompt)
@@ -673,6 +810,8 @@ def escolher_engine(pergunta, documentos_alvo=None):
 # ---------------------------------------------------------------------------
 
 PROMPTS_ESPECIALIZADOS = {
+    "artifact_extension_specification_analysed.md": "prompt_artifact_extension_specification_analysed.txt",
+    "list_of_bpmn_extension_experts.md": "prompt_artifact_bpmn_extension_experts.txt",
     _DOC_01: "prompt_01_analyse_need.txt",
     _DOC_02: "prompt_02_describe_concepts.txt",
     _DOC_03: "prompt_03_develop_extension.txt",
@@ -681,6 +820,30 @@ PROMPTS_ESPECIALIZADOS = {
     _DOC_06: "prompt_06_consult_experts.txt",
     _DOC_07: "prompt_07_publicise_extension.txt",
 }
+
+_ARTEFATOS_CONHECIDOS = {
+    "artifact_extension_specification_analysed.md",
+    "artifact_extension_specification_concepts_described.md",
+    "artifact_extension_specification_developed.md",
+    "artifact_extension_specification_validated_evaluated.md",
+    "artifact_modelling_and_observations.md",
+    "artifact_concrete_syntax_representations.md",
+    "artifact_checklist_completeness_consistency_conflicts.md",
+    "list_of_bpmn_extension_experts.md",
+}
+
+_BLOCO_INSTRUCAO_ARTEFATO = """
+--------------------------------------------------
+INSTRUCOES PARA PERGUNTAS SOBRE ARTEFATOS
+--------------------------------------------------
+
+Responda tratando o item como artefato do processo BPMN Extension.
+Nao exponha nomes internos de arquivos no corpo da resposta.
+Nao cite caminhos de arquivo, nomes de arquivo ou identificadores internos.
+Explique a finalidade, o conteudo esperado e o uso do artefato no processo.
+Quando a pergunta for "O que deve conter...", liste as secoes e campos que compoem o artefato.
+Quando a pergunta for "Para que serve...", explique a finalidade do artefato no processo.
+"""
 
 
 def carregar_prompt(nome_arquivo):
@@ -696,15 +859,20 @@ def criar_prompt(pergunta, tipo_base, documentos_alvo=None):
         lista = ", ".join(documentos_alvo)
         bloco_documentos = (
             f"\nDocumentos esperados para esta pergunta: {lista}\n"
-            "Priorize trechos desses documentos se eles aparecerem entre as fontes recuperadas.\n"
+            "Use esses documentos como contexto principal da resposta. Quando houver um artefato e subprocessos relacionados, explique o artefato com base nesses documentos, sem dizer que a base é insuficiente se houver elementos listados neles.\n"
         )
 
-    bloco_especializado = ""
+    eh_artefato = bool(
+        documentos_alvo and any(d in _ARTEFATOS_CONHECIDOS for d in documentos_alvo)
+    )
+
+    bloco_especializado = _BLOCO_INSTRUCAO_ARTEFATO if eh_artefato else ""
     if documentos_alvo:
         for documento in documentos_alvo:
             nome_prompt = PROMPTS_ESPECIALIZADOS.get(documento)
             if nome_prompt:
-                bloco_especializado = carregar_prompt(nome_prompt)
+                conteudo = carregar_prompt(nome_prompt)
+                bloco_especializado = (bloco_especializado + "\n" + conteudo).strip()
                 break
 
     base_prompt = carregar_prompt("base_prompt.txt")
@@ -868,37 +1036,89 @@ def _buscar_extensao_catalogo(pergunta_lower):
     return None
 
 
-def tentar_responder_catalogo_estruturado(pergunta):
-    pergunta_lower = pergunta.lower()
+def extrair_termo_catalogo(pergunta):
+    p = pergunta.lower()
 
-    if "autores" in pergunta_lower and ("mais" in pergunta_lower or "frequentes" in pergunta_lower):
+    padroes = [
+        r"relacionadas? (?:à|a|ao|com) (.+)",
+        r"relacionados? (?:à|a|ao|com) (.+)",
+        r"extens[oõ]es bpmn para (.+)",
+        r"extens[oõ]es para (.+)",
+        r"publicac[oõ]es relacionadas? (?:a|à|ao) (.+)",
+        r"publicações relacionadas? (?:a|à|ao) (.+)",
+        r"sobre (.+)",
+        r"para (.+)",
+    ]
+
+    lixo = [
+        "no catálogo de extensões bpmn",
+        "no catalogo de extensoes bpmn",
+        "no catálogo",
+        "no catalogo",
+    ]
+
+    for padrao in padroes:
+        match = re.search(padrao, p)
+        if match:
+            termo = match.group(1)
+            termo = termo.replace("?", "").replace(".", "").strip()
+            for l in lixo:
+                termo = termo.replace(l, "").strip()
+            if termo:
+                return termo
+
+    return None
+
+
+def tentar_responder_catalogo_estruturado(pergunta):
+    pergunta_norm = normalizar_texto(pergunta)
+
+    if "autores" in pergunta_norm and ("frequentes" in pergunta_norm or "mais" in pergunta_norm):
         return autores_mais_frequentes()
 
-    if "por ano" in pergunta_lower or "quantas publicações" in pergunta_lower:
+    if "por ano" in pergunta_norm or "quantas publicacoes" in pergunta_norm:
         return contar_publicacoes_por_ano()
 
-    resultado_ano = _buscar_por_ano_catalogo(pergunta_lower)
+    resultado_ano = _buscar_por_ano_catalogo(pergunta.lower())
     if resultado_ano:
         return resultado_ano
 
-    if "journal" in pergunta_lower:
+    if "journal" in pergunta_norm:
         return listar_publicacoes_por_tipo("journal")
 
-    if "conference" in pergunta_lower or "conferência" in pergunta_lower:
+    if "conference" in pergunta_norm or "conferencia" in pergunta_norm:
         return listar_publicacoes_por_tipo("conference")
 
-    resultado_relacao = _buscar_por_relacao_catalogo(pergunta_lower)
+    if "dominio" in pergunta_norm or "dominios" in pergunta_norm or "area de aplicacao" in pergunta_norm or "areas de aplicacao" in pergunta_norm:
+        return listar_dominios_e_areas()
+
+    # Consulta estruturada por domínio/área (campos controlados do SLR-DATA)
+    # Deve vir antes de qualquer busca textual ampla para evitar falsos positivos.
+    termo = extrair_termo_catalogo(pergunta)
+    if termo and (
+        "extensao" in pergunta_norm
+        or "extensoes" in pergunta_norm
+        or "relacionada" in pergunta_norm
+        or "relacionadas" in pergunta_norm
+        or "relacionado" in pergunta_norm
+        or "relacionados" in pergunta_norm
+        or "para" in pergunta_norm
+    ):
+        return buscar_extensoes_por_dominio_ou_area(termo)
+
+    # Fallback textual (mantido para consultas de publicações sem menção a extensões)
+    resultado_relacao = _buscar_por_relacao_catalogo(pergunta.lower())
     if resultado_relacao:
         return resultado_relacao
 
-    if "sobre" in pergunta_lower and "public" in pergunta_lower:
-        termo = pergunta_lower.split("sobre", 1)[1].replace(".", "").strip()
-        return buscar_publicacoes_por_termo(termo)
+    resultado_extensao = _buscar_extensao_catalogo(pergunta.lower())
+    if resultado_extensao:
+        return resultado_extensao
 
-    if contem_alguma(pergunta_lower, ["domínios", "dominios", "áreas de aplicação", "areas de aplicacao"]):
-        return listar_dominios_e_areas()
+    if termo:
+        return buscar_extensoes_catalogo_por_termo(termo)
 
-    return _buscar_extensao_catalogo(pergunta_lower)
+    return None
 
 
 # ---------------------------------------------------------------------------
@@ -991,6 +1211,35 @@ def limpar_resposta(texto):
 
         "análise analítica": "análise realizada",
         "conforme a orientação fornecida": "conforme o subprocesso correspondente",
+
+        "O subprocesso correspondente contém": "O artefato deve conter",
+        "subprocesso correspondente": "artefato correspondente",
+
+        "escenário": "cenário",
+        "Até final deste artefato": "Ao final deste artefato",
+
+        "constructos": "construtos",
+        "Constructos": "Construtos",
+
+        "reglas": "regras",
+        "Reglas": "Regras",
+
+        "notação concisa": "notação concreta",
+        "notacao concisa": "notação concreta",
+
+        "novas, reutilizadas ou adaptadas conceitos": "conceitos novos, reutilizados ou adaptados",
+
+        "deve contém": "deve conter",
+        "Deve contém": "Deve conter",
+
+        "dominio": "domínio",
+        "Dominio": "Domínio",
+
+        "o sintaxe concreta": "a sintaxe concreta",
+        "do sintaxe concreta": "da sintaxe concreta",
+        "validação do sintaxe concreta": "validação da sintaxe concreta",
+        "O documento list_of_bpmn_extension_experts.md fornece": "A lista de especialistas em extensões BPMN fornece",
+        "documento list_of_bpmn_extension_experts.md": "artefato List of BPMN Extension Experts",
     }
 
     for errado, certo in substituicoes.items():
@@ -1032,14 +1281,21 @@ while True:
         testar_perguntas_rag(modo_verbose="-v" in pergunta.lower())
         continue
 
+    if eh_consulta_catalogo(pergunta):
+        resposta_estruturada = tentar_responder_catalogo_estruturado(pergunta)
+        if resposta_estruturada:
+            print(LABEL_RESPOSTA)
+            imprimir_formatado(limpar_resposta(resposta_estruturada))
+            print("\nFonte: consulta estruturada com pandas nos CSVs do catálogo\n")
+            continue
+
     documentos_alvo = identificar_documentos_alvo(pergunta)
 
     if not documentos_alvo:
         resposta_estruturada = tentar_responder_catalogo_estruturado(pergunta)
         if resposta_estruturada:
             print(LABEL_RESPOSTA)
-            resposta_limpa = limpar_resposta(resposta.response)
-            imprimir_formatado(resposta_estruturada)
+            imprimir_formatado(limpar_resposta(resposta_estruturada))
             print("\nFonte: consulta estruturada com pandas nos CSVs do catálogo\n")
             continue
 
