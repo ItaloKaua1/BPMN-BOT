@@ -159,7 +159,7 @@ def listar_publicacoes_por_tipo(tipo_busca):
         .fillna("")
         .astype(str)
         .str.lower()
-        .str.contains(tipo_busca.lower())
+        .str.contains(tipo_busca.lower(), regex=False)
     ]
 
     if resultado.empty:

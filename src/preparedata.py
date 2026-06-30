@@ -210,7 +210,10 @@ def carregar_documentos_markdown():
             print(f"Aviso: diretório não encontrado: {diretorio}")
             continue
 
+        _ARQUIVOS_TESTE = {"rag_test_questions.md", "catalog_test_questions.md"}
         for caminho in sorted(diretorio.glob("*.md")):
+            if caminho.name in _ARQUIVOS_TESTE:
+                continue
             conteudo = caminho.read_text(encoding="utf-8")
             nome_arquivo = caminho.name
 

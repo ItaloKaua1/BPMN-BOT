@@ -501,6 +501,21 @@ def rotear_artefato(pergunta):
     p = normalizar_texto(pergunta)
 
     if contem_termo(p, [
+        "verificar completude",
+        "como verificar completude",
+        "verificar completude de uma extensao",
+        "verificar consistencia",
+        "como verificar consistencia",
+        "verificar consistencia de uma extensao",
+        "identificar conflitos com bpmn",
+        "como identificar conflitos com bpmn",
+        "checklist de completude",
+        "checklist completude consistencia conflitos",
+        "checklist de verificacao",
+    ]):
+        return ["artifact_checklist_completeness_consistency_conflicts.md"]
+
+    if contem_termo(p, [
         "extension specification analysed",
         "extension specification analyzed",
         "specification analysed",
@@ -540,6 +555,14 @@ def rotear_artefato(pergunta):
         ]
 
     if contem_termo(p, [
+        "registrar resultados de avaliacao",
+        "como registrar resultados de avaliacao",
+        "documentar melhorias identificadas durante a avaliacao",
+        "como documentar melhorias identificadas durante a avaliacao",
+    ]):
+        return ["artifact_extension_specification_validated_evaluated.md"]
+
+    if contem_termo(p, [
         "extension specification validated evaluated",
         "extension specification validated/evaluated",
         "validated evaluated",
@@ -549,6 +572,9 @@ def rotear_artefato(pergunta):
         "especificacao validada avaliada",
         "especificação validada avaliada",
     ]):
+        if p.startswith("como gerar") or "como gerar a extension specification" in p:
+            return []
+
         return [
             "artifact_extension_specification_validated_evaluated.md",
             _DOC_05,
@@ -591,6 +617,19 @@ def rotear_artefato(pergunta):
 
 def rotear_subprocesso(pergunta):
     p = normalizar_texto(pergunta)
+
+    if contem_termo(p, [
+        "especialistas externos devem ser notificados",
+        "quando especialistas externos devem ser notificados",
+        "enviado para especialistas durante o endorsement",
+        "enviadas para especialistas durante o endorsement",
+        "o que deve ser enviado para especialistas durante o endorsement",
+        "especialistas durante o endorsement",
+        "notificar especialistas externos",
+        "endorsement",
+        "endosso",
+    ]):
+        return [_DOC_07]
 
     # 03 vem antes do 02: perguntas sobre metamodelo/sintaxe podem conter
     # "conceitos", mas pertencem ao desenvolvimento, não à descrição.
@@ -662,6 +701,9 @@ def rotear_subprocesso(pergunta):
         "bpmn e suficiente",
     ]):
         return [_DOC_01]
+
+    if "suporte ferramental" in p and "catalogo" in p:
+        return [_DOC_07]
 
     if contem_termo(p, [
         "ferramenta",
@@ -965,8 +1007,8 @@ def tentar_responder_fluxo_guiado(pergunta):
             dominio = extrair_dominio(pergunta)
             estado_conversa["dominio"] = dominio
 
-            resultado_catalogo = buscar_publicacoes_por_termo(dominio)
-            tem_resultado = resultado_catalogo and "nenhuma publicação encontrada" not in resultado_catalogo.lower()
+            resultado_catalogo = buscar_extensoes_por_dominio_ou_area(dominio)
+            tem_resultado = resultado_catalogo and "não encontrei" not in resultado_catalogo.lower()
 
             if tem_resultado:
                 resposta = (
